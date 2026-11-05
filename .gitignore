@@ -1,0 +1,8 @@
+node_modules/
+# The compendium is built from packs/_source (npm run build:packs); Foundry rewrites the
+# LevelDB files while the world is open, so they stay out of git.
+packs/*
+!packs/_source/
+
+# Foundry Setup's package lock: no Update / Update All for this dev folder
+/cpr-hq.lock

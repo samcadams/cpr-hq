@@ -1,0 +1,43 @@
+<div class="hq-info">
+  {{#if editing}}
+  <div class="stacked-form">
+    {{formGroup fields.profile.fields.location value=source.profile.location name="hq.profile.location" localize=true}}
+    {{formGroup fields.profile.fields.tenure value=source.profile.tenure name="hq.profile.tenure" localize=true}}
+    {{formGroup fields.profile.fields.owner value=source.profile.owner name="hq.profile.owner" localize=true}}
+    <div class="hq-description">
+      <label>{{localize "CPRHQ.Field.description"}}</label>
+      <prose-mirror name="hq.profile.description" toggled value="{{source.profile.description}}">{{{descriptionHTML}}}</prose-mirror>
+    </div>
+    <h4 class="subhead"><i class="fa-solid fa-house"></i> {{localize "CPRHQ.Housing.heading"}}</h4>
+    {{formGroup fields.housing.fields.rent value=source.housing.rent name="hq.housing.rent" localize=true}}
+    {{#if rentReduced}}{{formGroup fields.housing.fields.reducedRent value=source.housing.reducedRent name="hq.housing.reducedRent" localize=true}}{{/if}}
+    {{formGroup fields.housing.fields.beds value=source.housing.beds name="hq.housing.beds" localize=true}}
+    {{formGroup fields.housing.fields.stash value=source.housing.stash name="hq.housing.stash" choices=stashChoices blank="" localize=true}}
+  </div>
+  {{else}}
+  <dl class="kv">
+    <dt>{{localize "CPRHQ.Field.location"}}</dt><dd>{{#if hq.profile.location}}{{hq.profile.location}}{{else}}<span class="hint">—</span>{{/if}}</dd>
+    <dt>{{localize "CPRHQ.Field.tenure"}}</dt><dd>{{localize tenureLabel}}{{#if hq.profile.owner}} · {{hq.profile.owner}}{{/if}}</dd>
+  </dl>
+  {{#if hq.profile.description}}<div class="description">{{{descriptionHTML}}}</div>{{/if}}
+
+  <h4 class="subhead"><i class="fa-solid fa-house"></i> {{localize "CPRHQ.Housing.heading"}}</h4>
+  <dl class="kv">
+    <dt>{{localize "CPRHQ.Stat.rent"}}</dt><dd><strong>{{rentLabel}}eb</strong>{{localize "CPRHQ.PerMonth"}}
+      {{#if rentReduced}}<small><s>{{baseRentLabel}}eb</s> {{localize "CPRHQ.Imp.rentReduction.name"}}</small>{{/if}}</dd>
+    <dt>{{localize "CPRHQ.Stat.beds"}}</dt><dd>{{bedsLabel}}{{#if rentReduced}} <small>{{localize "CPRHQ.OriginalBeds" n=hq.housing.beds}}</small>{{/if}}</dd>
+    <dt>{{localize "CPRHQ.Crew.tenants"}}</dt>
+    <dd>{{#each tenants}}<span class="tag">{{this}}</span>{{else}}<span class="hint">—</span>{{/each}}</dd>
+    <dt>{{localize "CPRHQ.Stash.label"}}</dt>
+    <dd>
+      {{#if stash}}
+        {{#if stash.missing}}<span class="hint"><i class="fa-solid fa-triangle-exclamation"></i> {{localize "CPRHQ.Stash.missing"}}</span>
+        {{else}}
+        <i class="fa-solid fa-box-archive"></i> {{stash.eb}}eb · {{stash.items}} {{localize "CPRHQ.Stash.items"}}
+        {{#if stash.canView}}<button type="button" class="btn-sm" data-action="openStash"><i class="fa-solid fa-box-open"></i> {{localize "CPRHQ.Stash.open"}}</button>{{/if}}
+        {{/if}}
+      {{else}}<span class="hint">{{localize "CPRHQ.Stash.none"}}</span>{{/if}}
+    </dd>
+  </dl>
+  {{/if}}
+</div>

@@ -1,0 +1,12 @@
+{{!-- Lifestyle & Housing: one card per character. Part of the Downtime/Lifestyle panel, or embedded on its own (api.panels.housing). --}}
+<section class="dt-section dt-lifestyle">
+  <header class="panel-head">
+    <h3><i class="fa-solid fa-house-user"></i> {{localize "CPRHQ.Lifestyle.heading"}}</h3>
+    <span class="spacer"></span>
+    {{#if isGM}}
+    <button type="button" class="btn-sm" data-action="managePresets"><i class="fa-solid fa-list"></i> {{localize "CPRHQ.Lifestyle.presetsButton"}}</button>
+    <button type="button" class="btn-sm" data-action="billLifestyle" {{#unless cards.length}}disabled{{/unless}}><i class="fa-solid fa-file-invoice-dollar"></i> {{localize "CPRHQ.Lifestyle.billButton"}}</button>
+    {{/if}}
+  </header>
+  {{#each cards}}{{> "cpr-hq.lifestyle-card"}}{{else}}<p class="hint">{{empty}}</p>{{/each}}
+</section>

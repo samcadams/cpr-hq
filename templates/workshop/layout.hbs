@@ -1,0 +1,69 @@
+{{!-- The Tech and their bank, the bench (with the HQ Workshop beside it), then projects as rows grouped by what they need next, or the Designs that can be made again. --}}
+{{> "cpr-hq.ws-profile"}}
+<div class="ws-top">
+  <div class="ws-top-main">
+    <h3><i class="fa-solid fa-hammer"></i> {{localize "CPRHQ.Workshop.bench"}}</h3>
+    {{> "cpr-hq.ws-bench"}}
+  </div>
+  {{#unless inHQ}}{{> "cpr-hq.ws-hq-card"}}{{/unless}}
+</div>
+<div class="ws-list-head">
+  <h3><i class="fa-solid fa-diagram-project"></i> {{localize "CPRHQ.Workshop.projects"}}</h3>
+  <button type="button" class="ws-pill {{#if (eq view "active")}}active{{/if}}" data-ws-action="view" data-value="active">{{localize "CPRHQ.Workshop.viewActive"}} <small>{{activeCount}}</small></button>
+  <button type="button" class="ws-pill {{#if (eq view "designs")}}active{{/if}}" data-ws-action="view" data-value="designs">{{localize "CPRHQ.Workshop.viewDesigns"}} <small>{{designCount}}</small></button>
+  {{#if (eq view "active")}}
+  <span class="ws-pills">
+    {{#each filters}}<button type="button" class="ws-pill {{#if active}}active{{/if}}" data-ws-action="filter" data-value="{{id}}">{{#if icon}}<i class="{{icon}}" style="color: {{color}}"></i> {{/if}}{{label}}</button>{{/each}}
+  </span>
+  {{/if}}
+  <span class="spacer"></span>
+  {{#if owner}}<button type="button" class="btn-primary" data-ws-action="new"><i class="fa-solid fa-plus"></i> {{localize "CPRHQ.Workshop.new"}}</button>{{/if}}
+</div>
+{{#if empty}}<p class="hint ws-empty">{{localize "CPRHQ.Workshop.emptyProjects"}}</p>{{/if}}
+{{#unless empty}}
+{{#if (eq view "designs")}}
+{{#if designs.length}}
+<div class="ws-rows">{{#each designs}}{{> "cpr-hq.ws-row"}}{{/each}}</div>
+<p class="hint">{{localize "CPRHQ.Workshop.designsHint"}}</p>
+{{else}}
+<p class="hint ws-empty">{{localize "CPRHQ.Workshop.emptyDesigns"}}</p>
+{{/if}}
+{{#if finishedWork.length}}
+<div class="ws-group">
+  <h4><i class="fa-solid fa-check"></i> {{localize "CPRHQ.Workshop.finishedWork"}} <small>{{finishedWork.length}}</small></h4>
+  <div class="ws-rows">{{#each finishedWork}}{{> "cpr-hq.ws-row"}}{{/each}}</div>
+</div>
+{{/if}}
+{{else}}
+{{#if activeCount}}
+<div class="ws-rows">
+  <div class="ws-row ws-row-head">
+    <button type="button" class="ws-sort {{#if (eq sort "name")}}active{{/if}}" data-ws-action="sort" data-value="name">{{localize "CPRHQ.Workshop.colProject"}}</button>
+    <span>{{localize "CPRHQ.Workshop.colStatus"}}</span>
+    <button type="button" class="ws-sort {{#if (eq sort "dv")}}active{{/if}}" data-ws-action="sort" data-value="dv">DV</button>
+    <button type="button" class="ws-sort {{#if (eq sort "chance")}}active{{/if}}" data-ws-action="sort" data-value="chance">{{localize "CPRHQ.Workshop.chance"}}</button>
+    <button type="button" class="ws-sort {{#if (eq sort "hours")}}active{{/if}}" data-ws-action="sort" data-value="hours">{{localize "CPRHQ.Workshop.colHours"}}</button>
+    <span></span>
+  </div>
+  {{#if sorted}}
+  {{#each sorted}}{{> "cpr-hq.ws-row"}}{{/each}}
+  {{else}}
+  {{#each groups}}
+  {{#if projects.length}}
+  <h4 class="ws-row-group"><i class="{{icon}}"></i> {{label}} <small>{{projects.length}}</small></h4>
+  {{#each projects}}{{> "cpr-hq.ws-row" grouped=true}}{{/each}}
+  {{/if}}
+  {{/each}}
+  {{/if}}
+</div>
+{{else}}
+<p class="hint ws-empty">{{localize "CPRHQ.Workshop.noActive"}}</p>
+{{/if}}
+{{/if}}
+{{/unless}}
+{{#if log.length}}
+<details class="ws-recent">
+  <summary><i class="fa-solid fa-clock-rotate-left"></i> {{localize "CPRHQ.Workshop.recent"}}</summary>
+  <ol class="ws-log">{{#each log}}<li><small>{{date}}</small> {{text}}</li>{{/each}}</ol>
+</details>
+{{/if}}

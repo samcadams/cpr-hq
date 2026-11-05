@@ -1,0 +1,8 @@
+{{!-- One Tech's Workshop (window and HQ page). --}}
+{{#if actor}}
+<section class="ws-panel" data-actor-uuid="{{actor.uuid}}">
+  {{> "cpr-hq.ws-layout"}}
+</section>
+{{else}}
+<p class="hint ws-none">{{empty}}</p>
+{{/if}}

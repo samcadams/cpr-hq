@@ -1,0 +1,21 @@
+{{!-- The Tech: TECH, Maker rank, specialty ranks, and the bank of hours. --}}
+<header class="ws-profile">
+  <img class="ws-portrait" src="{{actor.img}}" alt="">
+  <div class="ws-who">
+    <h2>{{actor.name}}</h2>
+    <div class="ws-ranks">
+      <span class="ws-rank" data-tooltip="CPRHQ.Workshop.techStat"><b>TECH</b> {{profile.tech}}</span>
+      <span class="ws-rank" data-tooltip="CPRHQ.Workshop.makerRank"><b>{{localize "CPRHQ.Workshop.maker"}}</b> {{profile.maker}}</span>
+      {{#each profile.specialties}}<span class="ws-rank ws-spec {{#unless rank}}zero{{/unless}}"><b>{{name}}</b> {{rank}}</span>{{/each}}
+    </div>
+    <div class="ws-ranks ws-skills">
+      {{#each profile.skills}}<span class="ws-rank {{#unless level}}zero{{/unless}}"><b>{{name}}</b> {{level}}</span>{{/each}}
+    </div>
+  </div>
+  <div class="ws-bank" data-tooltip="CPRHQ.Workshop.bankTip">
+    <span class="ws-bank-n">{{bank}}<small>h</small></span>
+    <span class="ws-bank-label">{{localize "CPRHQ.Workshop.banked"}}</span>
+    {{#if bank}}<span class="ws-bank-expiry"><i class="fa-solid fa-hourglass-end"></i> {{localize "CPRHQ.Workshop.bankExpires"}}</span>{{/if}}
+    {{#if isGM}}<button type="button" class="btn-sm" data-ws-action="bank"><i class="fa-solid fa-plus-minus"></i></button>{{/if}}
+  </div>
+</header>

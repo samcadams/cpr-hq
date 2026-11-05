@@ -1,0 +1,15 @@
+{
+  "name": "cpr-hq",
+  "private": true,
+  "type": "module",
+  "description": "Dev tooling only; Foundry reads module.json.",
+  "scripts": {
+    "build:packs": "node tools/build-packs.mjs",
+    "release": "node tools/release.mjs",
+    "test": "node --test tests/"
+  },
+  "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^1.0.0"
+  },
+  "license": "GPL-3.0-or-later"
+}

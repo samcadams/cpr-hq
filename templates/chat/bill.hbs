@@ -1,0 +1,13 @@
+<div class="cpr-hq-bill">
+  <h3><i class="fa-solid fa-file-invoice-dollar"></i> {{title}}: {{month}}</h3>
+  <table>
+    <thead><tr><th></th>{{#each columns}}<th>{{localize this}}</th>{{/each}}<th>{{localize "CPRHQ.Bill.total"}}</th></tr></thead>
+    <tbody>
+      {{#each lines}}
+      <tr {{#if short}}class="short"{{/if}}><td>{{name}}</td>{{#each cells}}<td>{{this}}</td>{{/each}}<td><strong>{{total}}eb</strong>{{#if invoiced}} <i class="fa-solid fa-file-invoice-dollar" data-tooltip="{{localize 'CPRHQ.Bill.invoiceTip'}}"></i>{{/if}}{{#if short}} <i class="fa-solid fa-triangle-exclamation" data-tooltip="{{localize 'CPRHQ.Bill.shortTip'}}"></i>{{/if}}</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <p>{{how}} · <strong>{{grand}}eb</strong></p>
+  {{#each notes}}<p class="cpr-hq-bill-note"><i class="fa-solid fa-hand-holding-heart"></i> {{this}}</p>{{/each}}
+</div>

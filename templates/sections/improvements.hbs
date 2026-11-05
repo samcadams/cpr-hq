@@ -1,0 +1,13 @@
+<div class="imp-page">
+  <header class="panel-head">
+    <input type="search" class="imp-search" placeholder="{{localize 'CPRHQ.Search'}}" value="{{impState.search}}">
+    <span class="filters">
+      {{#each impFilters}}
+      <button type="button" class="filter {{#if active}}active{{/if}}" data-filter="{{id}}">{{localize label}}</button>
+      {{/each}}
+    </span>
+    {{#if isGM}}<button type="button" class="btn-sm" data-action="createCustom"><i class="fa-solid fa-plus"></i> {{localize "CPRHQ.Custom.badge"}}</button>{{/if}}
+  </header>
+  <div class="card-grid">{{#each improvements}}{{> "cpr-hq.imp-card"}}{{/each}}</div>
+  <p class="search-empty hint" hidden>{{localize "CPRHQ.NoMatch"}}</p>
+</div>

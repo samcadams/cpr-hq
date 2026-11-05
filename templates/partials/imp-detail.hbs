@@ -1,0 +1,128 @@
+{{!-- One improvement in full: header, GM actions, tier ladder, notes.
+      Used by the inspector and by facility pages (e.g. Workshop). Hash params: page (no close button), textEditing. --}}
+<div class="imp-detail" data-imp-key="{{key}}">
+  <header class="inspector-head">
+    <i class="imp-icon {{icon}}"></i>
+    <div class="inspector-title">
+      {{#if textEditing}}
+      <input type="text" class="text-edit-name" name="hq.improvements.{{key}}.override.name" value="{{name}}" placeholder="{{originalName}}">
+      {{else}}
+      <h2>{{name}}</h2>
+      {{/if}}
+      <span class="badge badge-{{status}}">{{statusLabel}}</span>
+      {{#if custom}}<span class="badge badge-custom">{{localize "CPRHQ.Custom.badge"}}</span>{{/if}}
+      {{#if (and edited @root.isGM)}}<span class="badge badge-edited" data-tooltip="CPRHQ.TextEdit.editedTip">{{localize "CPRHQ.TextEdit.edited"}}</span>{{/if}}
+      <small>{{level}}</small>
+    </div>
+    <span class="spacer"></span>
+    {{#if @root.isGM}}
+    <button type="button" class="btn-icon {{#if textEditing}}active{{/if}}" data-action="toggleTextEdit"
+            data-tooltip="{{#if textEditing}}CPRHQ.DoneEditing{{else}}CPRHQ.TextEdit.button{{/if}}">
+      <i class="fa-solid {{#if textEditing}}fa-check{{else}}fa-pen{{/if}}"></i>
+    </button>
+    {{/if}}
+    {{#unless page}}
+    <button type="button" class="btn-icon" data-action="closeInspector" data-tooltip="CPRHQ.Close"><i class="fa-solid fa-xmark"></i></button>
+    {{/unless}}
+  </header>
+  {{> "cpr-hq.pips"}}
+  {{#if textEditing}}
+  <label class="desc-edit">{{localize "CPRHQ.Custom.description"}}
+    <textarea name="hq.improvements.{{key}}.override.description" rows="3" placeholder="{{localize 'CPRHQ.Custom.descriptionHint'}}">{{description}}</textarea>
+  </label>
+  {{else if description}}
+  <p class="imp-description">{{description}}</p>
+  {{/if}}
+  {{#if roles.length}}<p class="roles">{{localize "CPRHQ.Benefits"}}: {{#each roles}}<span class="role">{{this}}</span>{{/each}}</p>{{/if}}
+
+  {{#if @root.isGM}}
+  {{#if textEditing}}
+  <div class="row-actions">
+    <p class="hint">{{localize "CPRHQ.TextEdit.hint"}}</p>
+    {{#if edited}}<button type="button" class="btn-sm" data-action="resetText"><i class="fa-solid fa-rotate-left"></i> {{localize "CPRHQ.TextEdit.reset"}}</button>{{/if}}
+  </div>
+  {{else}}
+  <div class="row-actions">
+    {{#if action}}
+    <button type="button" class="btn-primary" data-action="advanceImprovement" {{#if action.blocked}}disabled data-tooltip="{{action.blocked}}"{{/if}}>
+      <i class="fa-solid {{#if installed}}fa-arrow-up{{else}}fa-cart-shopping{{/if}}"></i>
+      {{action.label}}{{#if action.cost}} ({{action.cost}} HQ IP){{/if}}
+    </button>
+    {{/if}}
+    {{#if installed}}
+    <button type="button" class="btn-danger" data-action="loseImprovement" data-tooltip="CPRHQ.Lose.hint"><i class="fa-solid fa-trash"></i> {{localize "CPRHQ.Lose.button"}}</button>
+    <button type="button" data-action="refundImprovement" data-tooltip="CPRHQ.Refund.hint"><i class="fa-solid fa-rotate-left"></i> {{localize "CPRHQ.Refund.button"}}</button>
+    {{/if}}
+  </div>
+  {{#if action.blocked}}<p class="hint"><i class="fa-solid fa-ban"></i> {{action.blocked}}</p>{{/if}}
+  {{#if custom}}
+  <div class="row-actions">
+    <button type="button" class="btn-sm" data-action="editCustom"><i class="fa-solid fa-pen"></i> {{localize "CPRHQ.Custom.edit"}}</button>
+    <button type="button" class="btn-sm btn-danger" data-action="deleteCustom"><i class="fa-solid fa-trash"></i> {{localize "CPRHQ.Custom.delete"}}</button>
+  </div>
+  {{/if}}
+  {{/if}}
+  {{/if}}
+
+  {{#if workstation}}
+  <div class="workstation-block">
+    <label><i class="fa-solid fa-user-tie"></i> {{localize "CPRHQ.Workstation.member"}}</label>
+    {{#if @root.isGM}}
+    <select class="workstation-member">
+      <option value="">{{localize "CPRHQ.Workstation.none"}}</option>
+      {{#each workstation.choices}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+    </select>
+    {{else}}
+    <strong>{{#if workstation.memberName}}{{workstation.memberName}}{{else}}{{localize "CPRHQ.Workstation.none"}}{{/if}}</strong>
+    {{/if}}
+    <p class="hint">{{#if workstation.noTeamMembers}}{{localize "CPRHQ.Workstation.noTeamMembers"}}{{else}}{{localize "CPRHQ.Workstation.hint"}}{{/if}}</p>
+  </div>
+  {{/if}}
+
+  <ol class="tier-ladder">
+    {{#each ladder}}
+    {{#if ../textEditing}}
+    {{#if textEditable}}
+    <li class="tier tier-{{state}} tier-editing">
+      <span class="tier-label">{{label}}</span>
+      <div class="tier-text">
+        <input type="text" name="hq.improvements.{{../key}}.override.tiers.{{tierIndex}}.summary" value="{{summary}}" placeholder="{{originalSummary}}">
+        <textarea name="hq.improvements.{{../key}}.override.tiers.{{tierIndex}}.text" rows="4" placeholder="{{originalText}}">{{text}}</textarea>
+      </div>
+    </li>
+    {{/if}}
+    {{else}}
+    <li class="tier tier-{{state}}">
+      <span class="tier-label">{{label}}</span>
+      {{!-- Hovering a tier slides its full text open; clicking keeps it open. The next tier starts open. --}}
+      <div class="tier-text {{#if (eq state "next")}}is-open{{/if}}">
+        <div class="tier-summary">{{summary}}{{#if (ne text summary)}} <i class="fa-solid fa-chevron-down tier-chevron"></i>{{/if}}</div>
+        {{#if (ne text summary)}}<div class="tier-more"><div><p class="tier-long">{{text}}</p></div></div>{{/if}}
+      </div>
+      {{#if ../effectsEnabled}}{{#if @root.isGM}}
+      <div class="tier-effects" data-tier-index="{{index}}">
+        {{#each effects}}
+        <span class="tier-effect {{#if disabled}}is-disabled{{/if}}" data-effect-uuid="{{uuid}}">
+          <a data-action="editTierEffect" data-tooltip="CPRHQ.Effects.edit"><i class="fa-solid fa-bolt"></i> {{name}}</a>
+          {{#if summary}}<small>{{summary}}</small>{{/if}}
+          <a data-action="deleteTierEffect" class="tier-effect-delete" data-tooltip="CPRHQ.Effects.delete"><i class="fa-solid fa-xmark"></i></a>
+        </span>
+        {{/each}}
+        <a class="tier-effect-add" data-action="addTierEffect"><i class="fa-solid fa-plus"></i> {{localize "CPRHQ.Effects.add"}}</a>
+      </div>
+      {{/if}}{{/if}}
+      <span class="tier-state">
+        {{#if (eq state "owned")}}<i class="fa-solid fa-check" data-tooltip="CPRHQ.Tier.owned"></i>{{/if}}
+        {{#if (eq state "replaced")}}<i class="fa-solid fa-arrow-turn-up" data-tooltip="CPRHQ.Tier.replaced"></i>{{/if}}
+        {{#if (eq state "next")}}{{#unless @root.hq.isFaction}}<span class="tier-cost">{{cost}} IP</span>{{/unless}}{{/if}}
+      </span>
+    </li>
+    {{/if}}
+    {{/each}}
+  </ol>
+
+  <label class="notes-field">
+    {{localize "CPRHQ.Notes"}}
+    <textarea name="hq.improvements.{{key}}.notes" rows="3" placeholder="{{localize 'CPRHQ.NotesHint'}}" {{#unless @root.editable}}disabled{{/unless}}>{{notes}}</textarea>
+  </label>
+</div>

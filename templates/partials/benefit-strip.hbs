@@ -1,0 +1,9 @@
+{{!-- Player benefits as a horizontal strip under the HQ title, above the red line. Mechanical benefits only. --}}
+<div class="benefit-strip strip-above">
+  <span class="strip-label"><i class="fa-solid fa-user"></i> {{localize "CPRHQ.Section.benefits"}}{{#if actor}} <small>{{actor}}</small>{{/if}}</span>
+  {{#if notice}}<span class="hint">{{notice}}</span>{{/if}}
+  <span class="chips chips-compact">
+    {{#each chips}}<span class="chip chip-{{kind}}" {{#if tip}}data-tooltip="{{tip}}" data-tooltip-class="cpr-hq-tooltip"{{/if}}><i class="{{icon}}"></i> {{label}}</span>{{/each}}
+  </span>
+  {{#if empty}}<span class="hint">{{empty}}</span>{{/if}}
+</div>

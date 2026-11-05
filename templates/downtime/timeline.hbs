@@ -1,0 +1,31 @@
+{{!-- Day timeline: one row per day, 24 hour columns. Bars are absolute hour ranges split per day (see timeline.mjs). --}}
+<div class="dt-board">
+  {{#if editable}}
+  <div class="dt-palette" data-reorderable="{{reorderable}}">
+    {{#each palette}}
+    <span class="dt-chip {{#if unavailable}}unavailable{{/if}} {{#if tooBig}}too-big{{/if}}" draggable="{{draggable}}" data-activity="{{id}}" style="--act: {{color}}"
+          data-tooltip="{{tip}}" data-tooltip-class="cpr-hq-tooltip"><i class="{{icon}}"></i> {{name}}</span>
+    {{/each}}
+    <span class="hint dt-palette-hint">{{localize "CPRHQ.Downtime.paletteHint"}}</span>
+  </div>
+  {{/if}}
+  <div class="dt-timeline {{#unless editable}}is-readonly{{/unless}}" data-editable="{{editable}}" data-mode="{{mode}}" data-target="{{target}}"
+       data-blocks="{{blocksJSON}}" data-locked="{{lockedJSON}}">
+    <div class="dt-hours"><span></span><div class="dt-hour-labels">{{#each hours}}<span>{{this}}</span>{{/each}}</div></div>
+    {{#each rows}}
+    <div class="dt-row">
+      <span class="dt-day">{{label}}</span>
+      <div class="dt-track" data-day="{{index}}">
+        {{#each segments}}
+        <div class="dt-seg {{#if locked}}locked{{/if}} {{#if startsHere}}starts{{/if}} {{#if endsHere}}ends{{/if}} {{#if missing}}missing{{/if}}" data-id="{{id}}"
+             style="left: {{left}}%; width: {{width}}%; --act: {{color}}" data-tooltip="{{tip}}" data-tooltip-class="cpr-hq-tooltip">
+          {{#if resizable}}{{#if ../../editable}}{{#if startsHere}}<span class="dt-handle start" data-handle="start"></span>{{/if}}{{/if}}{{/if}}
+          {{#if label}}<span class="dt-seg-label"><i class="{{icon}}"></i> {{name}}{{#if caption}}<span class="dt-seg-caption"> · {{caption}}</span>{{/if}}{{#if missing}} <i class="fa-solid fa-circle-exclamation"></i> <span class="dt-seg-missing-tag">{{localize "CPRHQ.Downtime.missingTag"}}</span>{{/if}}</span>{{/if}}
+          {{#if resizable}}{{#if ../../editable}}{{#if endsHere}}<span class="dt-handle end" data-handle="end"></span>{{/if}}{{/if}}{{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</div>

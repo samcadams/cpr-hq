@@ -1,0 +1,1286 @@
+{
+  "CPRHQ": {
+    "SheetLabel": "CPR Headquarters",
+    "SheetTitle": "Headquarters",
+    "NewHQName": "New Headquarters",
+    "CreateHQ": "New HQ",
+    "ConvertToHQ": "Convert to Headquarters",
+    "EditImage": "Change HQ image",
+    "CreatePage": "Add page",
+    "NoPages": "No pages yet.",
+    "DataHint": "Raw HQ flag data (GM only). For testing the DataModel round-trip.",
+    "Section": {
+      "info": "HQ information",
+      "improvements": "Improvements & Upgrades",
+      "activity": "Activity",
+      "downtime": "Downtime/Lifestyle",
+      "crew": "Crew",
+      "benefits": "My benefits",
+      "crewBenefits": "Crew benefits",
+      "workshop": "Workshop",
+      "garage": "Garage",
+      "lockup": "Lockup",
+      "journal": "Journal"
+    },
+    "Stat": {
+      "ip": "HQ IP",
+      "rent": "Rent",
+      "beds": "Beds",
+      "earned": "earned",
+      "date": "Date",
+      "datePending": "{span} not applied",
+      "dateHeld": "The HQ stays on this date until a downtime round covers the {span} Simple Calendar has advanced (now {live})."
+    },
+    "Field": {
+      "mode": "Mode",
+      "status": "Status",
+      "img": "Image",
+      "location": "Location",
+      "tenure": "Tenure",
+      "owner": "Owner / Landlord",
+      "description": "Description",
+      "rent": "Monthly Rent (eb)",
+      "beds": "Original beds",
+      "ipUnspent": "Unspent HQ IP",
+      "ipEarned": "Total HQ IP Earned",
+      "stash": "Stash container",
+      "stashHint": "A Container actor holding the crew's shared gear and money.",
+      "reducedRent": "Reduced rent (eb)"
+    },
+    "Mode": {
+      "crew": "Crew HQ",
+      "faction": "NPC / Faction HQ"
+    },
+    "Status": {
+      "unclaimed": "Unclaimed",
+      "active": "Active",
+      "suspended": "Access Lost",
+      "destroyed": "Destroyed"
+    },
+    "Tenure": {
+      "owned": "Owned",
+      "rented": "Rented",
+      "patron": "Patron-provided"
+    },
+    "ComingSoon": "Coming soon.",
+    "Close": "Close",
+    "FactionLocked": "NPC / faction HQ: only the GM can edit it.",
+    "Award": {
+      "button": "Award HQ IP",
+      "title": "Award HQ IP",
+      "amount": "HQ IP",
+      "reason": "Reason",
+      "reasonHint": "e.g. the gig or session",
+      "confirm": "Award",
+      "invalid": "Enter a whole number of HQ IP above 0.",
+      "log": "HQ IP awarded",
+      "logReason": "HQ IP awarded: {reason}"
+    },
+    "Settings": {
+      "title": "HQ settings",
+      "modeHint": "NPC / faction HQs can only be edited by the GM.",
+      "ipHint": "Use these to correct mistakes. Award new HQ IP with the Award button.",
+      "logStatus": "Status changed: {from} → {to}",
+      "logMode": "Mode changed to {to}",
+      "logIP": "{field} corrected: {from} → {to}",
+      "contentFolder": {
+        "name": "Content folder",
+        "hint": "A folder under Data that may hold cpr-hq.json: the books' full Improvement and Lifestyle texts, which the module doesn't ship. Without it the sheet shows short summaries. Reload after adding the file."
+      }
+    },
+    "Log": {
+      "award": "IP",
+      "purchase": "Purchases",
+      "upgrade": "Upgrades",
+      "loss": "Losses",
+      "status": "Status",
+      "correction": "Corrections",
+      "money": "Money",
+      "facility": "Facilities",
+      "note": "Notes",
+      "crew": "Crew"
+    },
+    "Save": "Save",
+    "Housing": {
+      "heading": "Housing",
+      "month": "month",
+      "noRent": "n/a",
+      "provided": "provided by company",
+      "street": "Living on the Street",
+      "wilderness": "Living in the Wilderness",
+      "vehicle": "Living in a Vehicle",
+      "cube": "Cube Hotel",
+      "cargo": "Cargo Container",
+      "studio": "Studio Apartment",
+      "twoBedroom": "Two-Bedroom Apartment",
+      "corpConapt": "Corporate Conapt",
+      "upscaleConapt": "Upscale Conapt",
+      "penthouse": "Luxury Penthouse",
+      "beavervilleHouse": "Corporate Beaverville House",
+      "beavervilleMansion": "Corporate Beaverville McMansion",
+      "purchased": "Purchased for {price}eb? (no rent)",
+      "atHQ": "Lives at {name}",
+      "providedNote": "Provided by the company: no rent.",
+      "check": {
+        "street": "Requires a DV15 Endurance Check each day to determine if Fatigued.",
+        "wilderness": "Requires a DV15 Wilderness Survival Check each day to determine if Fatigued."
+      },
+      "uncomfortable": "Uncomfortable situation",
+      "uncomfortableHint": "You wake up Fatigued: −2 to everything you do the next day.",
+      "whatIs": "What does fatigued/sleeping uncomfortable mean?",
+      "crammed": "Crammed: more people sleeping there than its bedrooms + 1. People in Cryo-stasis and corpses don't count.\nCube Hotels are stricter: a second person in a cube always makes it uncomfortable.",
+      "badSleep": "Bad sleep (Fatigued)"
+    },
+    "PerMonth": "/month",
+    "Edit": "Edit",
+    "DoneEditing": "Done editing",
+    "Stash": {
+      "label": "Stash",
+      "open": "Open",
+      "items": "items",
+      "none": "No stash linked.",
+      "missing": "Linked stash actor no longer exists."
+    },
+    "Imp": {
+      "evidenceWall": {
+        "name": "Evidence Wall",
+        "tiers": {
+          "0": {
+            "summary": "Lawman/Media +2 to investigation skills (ongoing investigations)"
+          },
+          "1": {
+            "summary": "Lawman +3; Media Credibility +1 for Believability"
+          }
+        }
+      },
+      "garage": {
+        "name": "Garage",
+        "tiers": {
+          "0": {
+            "summary": "Crew-owned Compact Groundcar; can't be sold; no Moto benefit"
+          },
+          "1": {
+            "summary": "Nomads re-spec Moto choices with 1 week of downtime"
+          }
+        }
+      },
+      "lockup": {
+        "name": "Lockup",
+        "tiers": {
+          "0": {
+            "summary": "Soundproof cell for 1 prisoner; BODY 13+ breaks out"
+          },
+          "1": {
+            "summary": "3 separate cells; Lawman +2 Interrogation after 1 day held"
+          }
+        }
+      },
+      "lounge": {
+        "name": "Lounge",
+        "tiers": {
+          "0": {
+            "summary": "Fixer +2 to social skills in in-person meetings held here"
+          },
+          "1": {
+            "summary": "Fixer/Media +2 to set up meetings with Contacts or Sources"
+          }
+        }
+      },
+      "medbay": {
+        "name": "Medbay",
+        "tiers": {
+          "0": {
+            "summary": "Crew heals as BODY +2; Medtech +2 First Aid, Paramedic, Surgery"
+          },
+          "1": {
+            "summary": "Medtech crafts Street Drugs as a Maker (Expertise = Medical Tech)"
+          }
+        }
+      },
+      "moraleBoost": {
+        "name": "Morale Boost",
+        "tiers": {
+          "0": {
+            "summary": "Crew Lifestyle cost −50eb/month"
+          },
+          "1": {
+            "summary": "Monthly: restore 1d6/2 Humanity"
+          },
+          "2": {
+            "summary": "Natural healing as BODY +1 (stacks with Medbay)"
+          },
+          "3": {
+            "summary": "Crew LUCK +1 (incl. Improved Team Members)"
+          },
+          "4": {
+            "summary": "Monthly: restore 1d6 Humanity (replaces #1)"
+          },
+          "5": {
+            "summary": "Fixers +2 Trading for pay; others haggle +20% as Operator 5"
+          },
+          "6": {
+            "summary": "Hustle: roll twice, take either"
+          },
+          "7": {
+            "summary": "Crew LUCK +1 more (total +2)"
+          },
+          "8": {
+            "summary": "Hustle: roll twice, gain both (replaces #6)"
+          },
+          "9": {
+            "summary": "Monthly: 2d6 keep highest Humanity (replaces #4)"
+          },
+          "10": {
+            "summary": "Custom benefit agreed with the GM"
+          }
+        }
+      },
+      "rentReduction": {
+        "name": "Rent Reduction",
+        "tiers": {
+          "0": {
+            "summary": "Rent drops to a cheaper rate (GM sets)"
+          },
+          "1": {
+            "summary": "+1 bed per Upgrade (cap: double the original beds)"
+          }
+        }
+      },
+      "serverRoom": {
+        "name": "Server Room",
+        "tiers": {
+          "0": {
+            "summary": "NET Architecture with a 20,000eb Home Security 2045 budget"
+          },
+          "1": {
+            "summary": "Netrunner crafts decks/hardware/programs as a Maker (Expertise = Interface)"
+          }
+        }
+      },
+      "studio": {
+        "name": "Studio",
+        "tiers": {
+          "0": {
+            "summary": "Rockerboy +2 to art skills while inside"
+          },
+          "1": {
+            "summary": "Refinement: +2 stacking per week on a project; a natural 1 wipes it"
+          }
+        }
+      },
+      "trainingArea": {
+        "name": "Training Area",
+        "tiers": {
+          "0": {
+            "summary": "1 week: Practice a combat skill for +1 until the next Group IP award"
+          },
+          "1": {
+            "summary": "Solos Practice two skills at once"
+          }
+        }
+      },
+      "workshop": {
+        "name": "Workshop",
+        "tiers": {
+          "0": {
+            "summary": "Maker time also counts toward a 2nd project"
+          },
+          "1": {
+            "summary": "Maker time also counts toward a 3rd project"
+          }
+        }
+      },
+      "workstation": {
+        "name": "Workstation",
+        "tiers": {
+          "0": {
+            "summary": "One Team Member becomes full crew: gains IP and a share of pay"
+          },
+          "1": {
+            "summary": "Team Member ignores Loyalty; losing it locks other purchases"
+          }
+        }
+      }
+    },
+    "Role": {
+      "crew": "Crew",
+      "exec": "Exec",
+      "fixer": "Fixer",
+      "lawman": "Lawman",
+      "media": "Media",
+      "medtech": "Medtech",
+      "netrunner": "Netrunner",
+      "nomad": "Nomad",
+      "rockerboy": "Rockerboy",
+      "solo": "Solo",
+      "tech": "Tech",
+      "tenants": "Tenants"
+    },
+    "OriginalBeds": "(orig. {n})",
+    "Search": "Search improvements…",
+    "NoMatch": "No improvements match.",
+    "Invested": "{n} HQ IP invested",
+    "Filter": {
+      "all": "All",
+      "installed": "Installed",
+      "available": "Available",
+      "custom": "Custom"
+    },
+    "ImpStatus": {
+      "available": "Available",
+      "installed": "Installed",
+      "maxed": "Maxed"
+    },
+    "Level": {
+      "none": "Not installed",
+      "improvement": "Improvement",
+      "upgrade": "Upgrade",
+      "upgraded": "Upgraded",
+      "upgradeN": "Upgrade #{n}",
+      "upgrades": "{n} upgrades",
+      "morale": "{n} / {max} upgrades",
+      "beds": "+{n} bed(s)"
+    },
+    "Action": {
+      "purchase": "Purchase",
+      "upgrade": "Upgrade",
+      "log": {
+        "purchase": "{name} purchased: {summary}",
+        "upgrade": "{name} {tier}: {summary}",
+        "loss": "{name} lost (no refund)",
+        "refund": "{name} {tier} refunded (correction)"
+      }
+    },
+    "Blocked": {
+      "ip": "Not enough HQ IP.",
+      "noRent": "Rent Reduction can't be applied to an HQ with no monthly rent.",
+      "destroyed": "This HQ is destroyed.",
+      "workstation": "The Upgraded Workstation was lost: restore it before spending HQ IP on anything else."
+    },
+    "Custom": {
+      "badge": "Custom",
+      "name": "Name",
+      "icon": "Icon",
+      "iconHint": "Font Awesome classes, e.g. fa-solid fa-seedling",
+      "roles": "Who benefits",
+      "tiers": "Tiers",
+      "tiersHint": "The first tier is the Improvement; each further tier is an Upgrade. Add Active Effects per tier from the improvement's panel after saving.",
+      "createTitle": "New custom improvement",
+      "editTitle": "Edit custom improvement",
+      "invalid": "A custom improvement needs a name and at least one tier.",
+      "logCreate": "Custom improvement created: {name}",
+      "logDelete": "Custom improvement deleted: {name}",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete the custom improvement <strong>{name}</strong>? Spent HQ IP is not refunded.",
+      "description": "Description",
+      "descriptionHint": "General description, separate from what each tier does (optional).",
+      "rolesHint": "Comma-separated Roles that benefit. Blank or \"Crew\" = everyone; \"Tenants\" = tenants.",
+      "tierSummary": "Short summary (shown on cards)",
+      "tierText": "Full text (optional; new lines are kept)",
+      "addTier": "Add upgrade tier",
+      "removeTier": "Remove tier"
+    },
+    "Benefits": "Benefits",
+    "Notes": "Notes",
+    "NotesHint": "GM / crew notes for this improvement",
+    "Tier": {
+      "owned": "Owned",
+      "replaced": "Replaced by a later upgrade"
+    },
+    "Lose": {
+      "button": "Lose",
+      "hint": "Lost or destroyed: rank to 0, no refund.",
+      "confirm": "Lose <strong>{name}</strong> and all its upgrades? Spent HQ IP is not refunded."
+    },
+    "Refund": {
+      "button": "Undo last",
+      "hint": "Correction: remove the most recent rank and refund its HQ IP.",
+      "confirm": "Remove the most recent rank of <strong>{name}</strong> and refund its HQ IP?"
+    },
+    "ReducedRent": {
+      "prompt": "Rent Reduction treats the rent as one Real Estate category lower. Set the new monthly rent.",
+      "current": "Current rent: {rent}eb/month."
+    },
+    "Crew": {
+      "npc": "NPC",
+      "teamMember": "Team Member",
+      "teamMemberOf": "Team Member ({name})",
+      "sponsor": "Works for",
+      "sponsorHint": "The crew member (usually an Exec) this Team Member works for.",
+      "healsTip": "Heals naturally as BODY {body} + {bonus} from HQ improvements",
+      "lifestyleTip": "Monthly Lifestyle, after HQ discounts",
+      "lifestyleTipEdit": "Monthly Lifestyle, after HQ discounts. Click to change it.",
+      "tenant": "Tenant: lives in the HQ",
+      "toggleTenant": "Toggle tenant",
+      "tenants": "Tenants",
+      "remove": "Remove from crew",
+      "removeConfirm": "Remove <strong>{name}</strong> from the crew?",
+      "empty": "No crew yet.",
+      "drop": "Drop an actor here to add them",
+      "wrongType": "Only characters and mooks can join a crew.",
+      "overBeds": "More tenants than beds ({beds}).",
+      "headerNote": "{n} · {tenants}/{beds} beds",
+      "logJoin": "{name} joined the crew",
+      "logLeave": "{name} left the crew",
+      "healsAs": "Heals as BODY {n}",
+      "improvedOf": "Improved Team Member ({name})"
+    },
+    "Chip": {
+      "luck": "LUCK +{n}",
+      "healing": "Heals as BODY +{n}",
+      "lifestyle": "Lifestyle {n}eb/month",
+      "lifestyleTip": "Applied when the GM bills the month.",
+      "humanity": "Monthly Humanity: {formula}",
+      "skillGroup": "+{n} {name} skills",
+      "rollTip": "Roll option: tick it in the roll dialog when it applies.",
+      "none": "No HQ benefits apply to this character.",
+      "notCrew": "Your character isn't part of this crew.",
+      "faction": "NPC / faction HQ: benefits need GM permission and aren't applied to sheets.",
+      "noAccess": "Access to this HQ is lost: no benefits apply.",
+      "legendAuto": "On your sheet",
+      "legendRoll": "Roll-dialog option",
+      "everyone": "Everyone",
+      "noneCrew": "No HQ benefits apply yet.",
+      "legendInfo": "Rule to remember"
+    },
+    "Activity": {
+      "add": "Add entry",
+      "type": "Type",
+      "text": "What happened",
+      "delta": "Change",
+      "deltaHint": "Optional, shown at the end of the row. Doesn't change any values.",
+      "delete": "Delete entry",
+      "deleteConfirm": "Delete this activity entry? This can't be undone.",
+      "empty": "Nothing has happened here yet.",
+      "noMatch": "No entries of this kind.",
+      "truncated": "Showing the most recent {n} entries.",
+      "by": "{user} · {when}",
+      "filter": {
+        "all": "All",
+        "ip": "IP",
+        "improvements": "Improvements",
+        "crew": "Crew",
+        "money": "Money",
+        "status": "Status",
+        "notes": "Notes"
+      }
+    },
+    "Bill": {
+      "button": "Bill month",
+      "buttonMonth": "Bill {month}",
+      "tooltip": "Review and send this month's HQ rent bill",
+      "title": "Monthly bill: {hq}",
+      "month": "Month",
+      "member": "Crew member",
+      "rent": "Rent",
+      "lifestyle": "Lifestyle",
+      "total": "Total",
+      "send": "Send bill",
+      "rentNote": "Rent {rent}eb split equally between {n} crew member(s). Lifestyle and personal Housing are billed from Downtime/Lifestyle. Edit anything before sending.",
+      "wealth": "Has {eb}eb",
+      "noCrew": "No crew members to bill.",
+      "noMonth": "Give the bill a month.",
+      "reason": "{hq}: rent for {month}",
+      "logDeduct": "Billed {month}: {n} crew member(s), deducted from their eb",
+      "humanityNote": "Morale Boost: each crew member can restore {formula} Humanity this month (up to their Maximum Humanity). Roll it yourself.",
+      "chatDeduct": "Deducted from each character's eb",
+      "chatInvoice": "Invoiced through BangMe!: nothing moves until each character pays",
+      "chatMixed": "Invoiced through BangMe! where marked, nothing moves until they pay; the rest deducted from their eb",
+      "mode": "Payment",
+      "modeDeduct": "Deduct from their eb",
+      "modeInvoice": "Invoice through BangMe!",
+      "invoiceTip": "Invoiced: not paid yet",
+      "invoiceFallback": "Can't invoice {names} (no Agent, wallet or signal): deducted from their eb instead.",
+      "invoiceMember": "{name} {status}",
+      "invoiceStatus": { "pending": "unpaid", "paid": "paid", "declined": "declined", "cancelled": "cancelled" },
+      "logInvoice": "Invoiced {month} through BangMe!: {who}",
+      "shortTip": "Not enough eb: balance is now negative",
+      "housing": "Housing",
+      "trauma": "Trauma Team",
+      "apps": "Apps"
+    },
+    "Alert": {
+      "suspended": "Access to this HQ is lost: its improvements give no benefits until access is restored.",
+      "destroyed": "This HQ is destroyed: no benefits, and nothing can be purchased.",
+      "unbilled": "{month} hasn't been billed yet: HQ rent is due.",
+      "review": "Review bill",
+      "beds": "{tenants} tenants but only {beds} beds.",
+      "firstBill": "New HQ: bill the first month's rent?",
+      "dismiss": "Dismiss",
+      "downtime": "{span} since the last downtime: schedule a downtime round.",
+      "downtimePlanning": "Downtime round ({n} days) is being planned.",
+      "downtimeOpen": "Downtime round ({n} days) is open for players.",
+      "openDowntime": "Open Downtime"
+    },
+    "Time": {
+      "day": "{n} day",
+      "days": "{n} days",
+      "hour": "{n} hour",
+      "hours": "{n} hours"
+    },
+    "TextEdit": {
+      "button": "Edit text",
+      "hint": "Changes apply to this HQ only. Leave a field blank to use the original wording.",
+      "reset": "Restore original text",
+      "edited": "Edited",
+      "editedTip": "The GM changed this improvement's text for this HQ.",
+      "resetConfirm": "Restore the original text of {name} for this HQ? Your edits are discarded."
+    },
+    "Pages": {
+      "untitled": "New page",
+      "title": "Add page",
+      "name": "Name",
+      "type": "Type",
+      "noGM": "A GM needs to be connected to add pages.",
+      "hint": "The GM's client creates the page; you'll own it."
+    },
+    "Lifestyle": {
+      "title": "Lifestyle",
+      "preset": "Preset",
+      "description": "Description",
+      "cost": "Cost per month (eb)",
+      "edit": "Set lifestyle",
+      "kibble": "Kibble",
+      "genericPrepak": "Generic Prepak",
+      "goodPrepak": "Good Prepak",
+      "freshFood": "Fresh Food",
+      "presetDescription": "Preset description",
+      "desc": {
+        "kibble": "Kibble at every meal. A movie or braindance once a month.",
+        "genericPrepak": "Prepak that beats kibble. A decent bar or a sit-down meal out every weekend.",
+        "goodPrepak": "Prepak good enough to pass for real food. Good bars and restaurants, and a concert or game once a month.",
+        "freshFood": "Real food. An executive bar, a top restaurant once a month, and a hotel room whenever you're stuck far from home."
+      },
+      "bc": {
+        "heading": "What it covers (Black Chrome)",
+        "note": "Paid for by the monthly cost. Anything beyond comes out of your pocket.",
+        "eat": "Food",
+        "comms": "Agent",
+        "fun": "Entertainment",
+        "travel": "Transport",
+        "kibble": {
+          "eat": "Two meals of Kibble a day.",
+          "comms": "An Agent account: the Data Pool, calls and texts.",
+          "fun": "One 20eb (Everyday) outing a month.",
+          "travel": "Bus and subway pass; one taxi a month, to and from Moderate, Corporate or Executive zones."
+        },
+        "genericPrepak": {
+          "eat": "One Kibble and two Generic Prepak meals a day.",
+          "comms": "An Agent account, plus one text to someone in another city a week.",
+          "fun": "One 20eb (Everyday) outing a week.",
+          "travel": "Bus and subway pass; one taxi a week, to and from Moderate, Corporate or Executive zones."
+        },
+        "goodPrepak": {
+          "eat": "One Generic Prepak and two Good Prepak meals a day.",
+          "comms": "An Agent account, plus one text to another city a day and a 10-minute call to another city a week.",
+          "fun": "One 20eb (Everyday) outing a day, and one 100eb (Premium) a month.",
+          "travel": "Bus and subway pass; one taxi a day, to and from Moderate, Corporate or Executive zones; a compact groundcar for 24 hours once a month."
+        },
+        "freshFood": {
+          "eat": "One Good Prepak and two Fresh Food meals a day.",
+          "comms": "An Agent account, plus texts to other cities any time, a 10-minute call to another city a day and a 10-minute video call a week.",
+          "fun": "One 50eb (Costly) outing a day, one 100eb (Premium) a week and one 500eb (Expensive) a month.",
+          "travel": "Bus and subway pass; one taxi a day anywhere in the city; a compact groundcar for 24 hours once a week."
+        }
+      },
+      "heading": "Lifestyle & Housing",
+      "presetsButton": "Lifestyle presets",
+      "billButton": "Bill Lifestyle & Housing",
+      "billTitle": "Lifestyle & Housing",
+      "billReason": "Lifestyle & housing for {month}",
+      "billNote": "Each character's Lifestyle (after HQ discounts), their Housing rent, and (with the Agent module) their paid Trauma Team plan and app subscriptions. Housing at an HQ is billed by the HQ; bought or company-provided housing costs nothing. Edit anything before sending.",
+      "totalTip": "What the next Lifestyle & Housing bill charges",
+      "discount": "HQ discount: {n}eb",
+      "empty": "You don't own a character.",
+      "emptyGM": "No player characters yet.",
+      "presetsTitle": "Lifestyle presets",
+      "rulebook": "Rulebook",
+      "customPresets": "Your presets",
+      "addPreset": "Add preset",
+      "removePreset": "Remove preset",
+      "presetName": "Name",
+      "setByGM": "set by GM"
+    },
+    "Effects": {
+      "folder": "CPR HQ: custom improvement effects",
+      "itemName": "{hq}: {name} (HQ effects)",
+      "add": "Effect",
+      "edit": "Edit effect",
+      "delete": "Delete effect",
+      "deleteConfirm": "Delete the effect {name}? Crew members lose it on the next sync."
+    },
+    "Garage": {
+      "empty": "No vehicles parked.",
+      "drop": "Drop a vehicle Item here",
+      "remove": "Remove from garage",
+      "removeConfirm": "Remove {name} from the garage? The Item itself is kept.",
+      "wrongType": "Only vehicle Items can be parked in the garage.",
+      "noDefault": "Couldn't find the Compact Groundcar in CPR's vehicle compendium.",
+      "logAdd": "{name} parked in the garage",
+      "logRemove": "{name} removed from the garage"
+    },
+    "Lockup": {
+      "headerNote": "{n}/{max} cells",
+      "empty": "Nobody in the lockup.",
+      "drop": "Drop an actor here to lock them up",
+      "body": "BODY {n}",
+      "since": "since {date}",
+      "full": "The lockup is full ({n} cells).",
+      "wrongType": "Only characters and mooks can be locked up.",
+      "tryEscape": "Try escape (roll Athletics)",
+      "release": "Release",
+      "releaseConfirm": "Release {name} from the lockup?",
+      "escapeTitle": "{name}: escape attempt",
+      "dv": "Escape DV",
+      "dvHint": "Set at the time of the attempt. The prisoner rolls Athletics and must beat it.",
+      "roll": "Roll",
+      "formula": "Athletics: {stat} {statValue} + skill {level} + d10 {face}",
+      "critSuccess": "critical success",
+      "critFail": "critical failure",
+      "vs": "vs",
+      "brokeOut": "{name} has broken out of lockup!",
+      "logAdd": "{name} locked up",
+      "logRelease": "{name} released from the lockup",
+      "logEscape": "{name} broke out of the lockup",
+      "logHeld": "{name} failed to escape the lockup",
+      "attempts": "{name} attempts to escape!",
+      "successful": "Successful",
+      "unsuccessful": "Unsuccessful"
+    },
+    "Workstation": {
+      "member": "Improved Team Member",
+      "none": "None",
+      "hint": "This Team Member counts as full crew: they get HQ benefits (including LUCK).",
+      "noTeamMembers": "Mark a crew member as a Team Member first (crew panel).",
+      "logSet": "{name} became the Improved Team Member",
+      "logClear": "Improved Team Member cleared"
+    },
+    "Training": {
+      "effect": "Training Area: Practice ({skills})",
+      "noArea": "{actor}: Training without a Training Area ({skills}): no benefit.",
+      "twoSkills": "Solo with an upgraded Training Area: pick two different skills. Both are Practiced.",
+      "missionIP": "Mission IP received",
+      "missionIPTip": "The crew got IP from the Group column after a mission: ends every character's Training Area Practice.",
+      "missionIPConfirm": "End every character's Training Area Practice?",
+      "cleared": "Practice ended for {n} character(s)."
+    },
+    "Downtime": {
+      "title": "Downtime / Lifestyle",
+      "button": "Lifestyle",
+      "heading": "Downtime",
+      "placeholder": "",
+      "settledOn": "Settled to {date}",
+      "behind": "Calendar is {n} day(s) before the settled date",
+      "behindTip": "Simple Calendar was turned back past the last settled downtime, so no days can be settled until it catches up. Use Shift dates to move the downtime dates back with it.",
+      "shift": "Shift dates",
+      "shiftTip": "Move every downtime date (settled date, open round, Past Days) earlier or later, e.g. to turn the campaign's calendar back.",
+      "shiftText": "Moves the settled date, the open round and every character's Past Days by the same number of days. Schedules keep their hours; only their dates change.",
+      "shiftBehind": "Simple Calendar is already {n} day(s) before the settled date: shifting by −{n} lines the downtime dates up with it.",
+      "shiftDays": "Days",
+      "shiftDaysHint": "Negative moves dates earlier, positive later.",
+      "shiftCalendar": "Also move Simple Calendar",
+      "days": "{n} day(s)",
+      "planning": "Planning (GM only)",
+      "open": "Open for players",
+      "party": "Whole party",
+      "planningHint": "Drag \"In Mission\" onto the timeline for the whole party, or pick a character to give them their own mission hours. Release the round when you're done.",
+      "customFor": "{name} has their own mission hours.",
+      "partyFor": "{name} follows the party's mission hours.",
+      "customMission": "Give them their own",
+      "usePartyMission": "Use the party's",
+      "customMissionTip": "Own mission hours",
+      "status": {
+        "draft": "Drafting",
+        "submitted": "Submitted",
+        "approved": "Approved",
+        "returned": "Returned"
+      },
+      "approve": "Approve",
+      "return": "Return",
+      "returnTitle": "Return to {name}",
+      "returnNote": "What should they change?",
+      "submit": "Submit to GM",
+      "fill": "Fill remaining with Freetime",
+      "fillTip": "Every hour must be accounted for before you submit: unassigned hours become Freetime.",
+      "fillFirst": "Account for every hour first (Fill remaining with Freetime).",
+      "detailsFirst": "Some activities still need details (marked with !). Click them to fill them in.",
+      "missingDetails": "{n} activity(ies) need details",
+      "missingTag": "Missing info",
+      "missingTip": "Missing required info: {what}",
+      "chooseOption": "Click to choose…",
+      "partialDay": "{span} since the last downtime. A round can start once a full day has passed.",
+      "totalCosts": "Total costs:",
+      "fixedLength": "This activity takes a set amount of time.",
+      "returnedToYou": "Your GM has returned your sheet for modifications:",
+      "notEnoughTime": "Takes {h}h; only {free}h free (unassigned or Sleep)",
+      "banner": {
+        "draft": "Schedule your downtime now",
+        "submitted": "Downtime submitted to GM",
+        "approved": "Downtime approved by GM",
+        "returned": "Returned by GM"
+      },
+      "costHint": "Costs are shown only: the GM deducts them by hand.",
+      "countsAsSleep": "Counts as sleep",
+      "variant": "Type",
+      "detail": "Detail",
+      "noNotes": "No comments.",
+      "needsRole": "{role} only",
+      "needsUpgrade": "Needs {name} (upgrade {rank}) at your HQ",
+      "hintHours": "{h}h",
+      "hintVariants": "Pick the type after placing it",
+      "editActivities": "Activities",
+      "editActivitiesTip": "Edit the activities players can schedule",
+      "ed": {
+        "title": "Downtime Activities",
+        "hint": "Players drag these onto their schedule. Hours are per day; with more than one day the activity repeats at the same hour each day (24 hours a day makes one long block). Costs are shown, never charged.",
+        "name": "Name",
+        "icon": "Icon (Font Awesome)",
+        "color": "Colour",
+        "hours": "Hours (per day)",
+        "days": "Days",
+        "minHours": "Shortest block (h)",
+        "cost": "Cost",
+        "costHint": "e.g. 500eb",
+        "role": "Role only",
+        "anyone": "Anyone",
+        "app": "Agent app only",
+        "prompt": "Player must give",
+        "promptComment": "A comment (required)",
+        "promptText": "A separate detail",
+        "promptSkill": "A skill",
+        "promptLabel": "Asked as",
+        "promptOptions": "Skill choices (comma-separated)",
+        "promptOptionsHint": "Blank: every skill on the character",
+        "flexible": "Resizable",
+        "flexibleTip": "Players can change its length (down to the shortest block). Otherwise it always takes its set hours.",
+        "requires": "Needs HQ improvement",
+        "rank": "At upgrade",
+        "none": "None",
+        "description": "Rules / flavour text",
+        "types": "{n} types",
+        "addVariant": "Add type",
+        "removeVariant": "Remove type",
+        "variantsHint": "Types are picked after placing (e.g. kinds of Medical Treatment); each sets its own hours, cost and sleep.",
+        "up": "Move up",
+        "down": "Move down",
+        "remove": "Remove",
+        "add": "Add activity",
+        "newName": "New activity",
+        "reset": "Reset to defaults",
+        "resetConfirm": "Replace the activity list with the defaults? Your changes are lost (schedules keep their bars)."
+      },
+      "notOpen": "The GM is still planning this round.",
+      "release": "Release to players",
+      "cancel": "Cancel round",
+      "cancelConfirm": "Cancel this downtime round? Players' drafts for it are discarded.",
+      "settle": "Settle round",
+      "settleText": "Settle {n} day(s): every schedule goes to the characters' Past Days, the settled date moves forward, and HQ facilities get the time.",
+      "settlePending": "Not approved yet: {names}. Their schedules are kept as they are.",
+      "applyFatigue": "Fatigued if they slept under 6h on the last day",
+      "logSettled": "Downtime settled: {n} day(s)",
+      "unsettled": "{n} in-game day(s) since the last downtime.",
+      "start": "Start downtime round",
+      "waitGM": "Waiting for the GM to start a downtime round.",
+      "upToDate": "Downtime is up to date.",
+      "noDays": "No unsettled days: advance Simple Calendar first.",
+      "unassigned": "{n}h unassigned",
+      "shortSleep": "Under 6h sleep on {n} day(s): Fatigued the next day",
+      "pastDays": "Past days",
+      "apply": {
+        "title": "Apply results",
+        "hint": "Nothing changes until you press a button. Adjust a value first if a roll or a price came out differently.",
+        "round": "{from} – {to}",
+        "stats": "HP {hp} · Humanity {humanity} · {eb}eb",
+        "healDetail": "{days} day(s) × BODY {body} × {rate}",
+        "materials": "Med Tech (materials)",
+        "confirm": "Confirm",
+        "apply": "Apply",
+        "deduct": "Deduct",
+        "postNote": "Post note",
+        "skip": "Skip",
+        "already": "That was already applied.",
+        "confirmFirst": "Tick Confirm before deducting.",
+        "invalid": "That value isn't valid.",
+        "short": "{name} is now at {eb}eb.",
+        "reason": "Downtime: {name}",
+        "rollFlavor": "{actor}: {name}, Humanity recovered",
+        "addictionNote": "{actor} completed {name}: freed of one addiction, regained if the drug is taken within 1 year.",
+        "results": "Applied results",
+        "resultHeal": "{name}: +{n} HP",
+        "resultHumanity": "{name}: +{n} Humanity",
+        "resultPaid": "{name}: paid {n}eb",
+        "resultNote": "{name}: done"
+      },
+      "noHistory": "No settled downtime yet.",
+      "loadMore": "Load more",
+      "paletteHint": "Drag an activity onto a day, drag to move it, grab the edges to resize it, click to edit or add a comment.",
+      "hintMin": "At least {h}h",
+      "hintMulti": "{h}h a day for {d} days",
+      "noRoom": "That doesn't fit inside this round.",
+      "overlap": "That overlaps another activity.",
+      "tooShort": "This activity needs at least {h}h.",
+      "length": "Length",
+      "notes": "Comments",
+      "notesHint": "What are they up to?",
+      "groupHint": "Part of a multi-day activity: moving or removing it, and its comments, affect every day.",
+      "remove": "Remove",
+      "repeat": "Repeat every day",
+      "repeated": "Copied to {n} more day(s).",
+      "noRepeat": "No other day has room at these hours."
+    },
+    "Workshop": {
+      "button": "Workshop",
+      "windowTitle": "Workshop: {actor}",
+      "bench": "Workbench",
+      "projects": "Projects",
+      "new": "New project",
+      "newTitle": "New Workshop project",
+      "reviseTitle": "Revise project",
+      "reviewTitle": "Review project: {actor}",
+      "submit": "Send to GM",
+      "approve": "Approve",
+      "return": "Return to player",
+      "review": "Review",
+      "revise": "Revise",
+      "delete": "Delete project",
+      "deleteConfirm": "Delete <strong>{name}</strong>? Its hours are lost.",
+      "roll": "Roll Maker check",
+      "prototype": "Fabricate Prototype",
+      "toBench": "To bench",
+      "takeOff": "Take off",
+      "fabricateAgain": "Fabricate again",
+      "viewActive": "Active",
+      "viewDesigns": "Designs",
+      "filterAll": "All",
+      "colProject": "Project",
+      "colStatus": "Status",
+      "colHours": "Hours",
+      "madeN": "made {n}×",
+      "completedOn": "Completed {date}",
+      "designsHint": "Everything this Tech has made or invented. Fabricate again adds a new approved project to Active, with the same DV and hours.",
+      "emptyDesigns": "Finished inventions and fabrications appear here, ready to make again.",
+      "finishedWork": "Upgrades and repairs",
+      "noActive": "No active projects.",
+      "onSlot": {
+        "0": "On main slot",
+        "1": "On 2nd slot",
+        "2": "On 3rd slot"
+      },
+      "kind": {
+        "invent": "Invented",
+        "fabricate": "Fabricated",
+        "upgrade": "Upgraded",
+        "repair": "Repaired"
+      },
+      "unbench": "Take off the bench",
+      "unlink": "Unlink item",
+      "dropItem": "Drop an item here",
+      "gmItem": "The GM links the item",
+      "gmLinks": "Only the GM links items to Fabricate and Invent projects.",
+      "dropProject": "Drag a project here",
+      "banked": "Unassigned Hours",
+      "bankTip": "Hours spent on Tech work in the last downtime round. Spend them on the main project (with a Workshop the other slots get the same hours). Unspent hours are lost when the next downtime round settles.",
+      "techStat": "TECH stat",
+      "makerRank": "Maker (Role Ability) rank",
+      "maker": "Maker",
+      "workN": "Work {n}h",
+      "noMain": "Put a project in the main slot.",
+      "slot": {
+        "0": "Main project",
+        "1": "2nd project · Workshop",
+        "2": "3rd project · Upgraded Workshop"
+      },
+      "slotNeedsWorkshop": "A Workshop on your HQ lets the same hours count toward a 2nd project.",
+      "slotNeedsUpgrade": "Upgrading the Workshop adds a 3rd project.",
+      "repairNoEcho": "Repairs don't get Workshop time.",
+      "mainIsRepair": "The main project is a Repair: no Workshop time.",
+      "readyNotice": "{name} has all its hours: roll the Maker check.",
+      "check": "Check",
+      "chance": "Chance",
+      "success": "Success",
+      "failure": "Failure",
+      "critSuccess": "Critical (+1d10)",
+      "critFail": "Fumble (−1d10)",
+      "successHint": {
+        "fabricate": "Made. Finish it to clear the slot; the GM hands out the item.",
+        "invent": "Invented: Fabricate Prototype before anyone else can claim it.",
+        "upgrade": "The GM applies the upgrade to the item.",
+        "repair": "Repaired.",
+        "halfway": "The design works: finish the remaining hours to complete the invention."
+      },
+      "failureHint": "Start over: the hours are lost, the materials and item are fine.",
+      "lastSuccess": "Last roll {total}: success",
+      "lastFail": "Last roll {total}: failed, started over",
+      "materialsReady": "acquired",
+      "notifyGM": "{actor} sent a Workshop project for review: <strong>{name}</strong> ({type}).",
+      "inventEstimate": "You don't pick the Price Category: the GM sets it (Expensive or more) from similar items, and it sets the DV and time. You roll the check halfway through; the GM writes the rules.",
+      "halfPrice": "half the item's price",
+      "noTech": "No Tech selected.",
+      "noCrewTech": "No Techs in this crew.",
+      "noWorkshop": "No Workshop yet",
+      "hqNoAccess": "The HQ is out of reach: no Workshop time.",
+      "aboutImprovement": "Workshop Improvement",
+      "recent": "Recent work",
+      "bankTitle": "Tech hours: {actor}",
+      "bankNow": "Banked: {n}h.",
+      "bankChange": "Add (or remove, negative) hours",
+      "bankReason": "Reason",
+      "emptyProjects": "No projects yet.",
+      "type": {
+        "fabricate": "Fabricate",
+        "invent": "Invent",
+        "upgrade": "Upgrade",
+        "repair": "Repair"
+      },
+      "typeHint": {
+        "fabricate": "Make an existing item from cheaper materials",
+        "invent": "Design something new (GM writes its rules)",
+        "upgrade": "Improve an item: one upgrade per item",
+        "repair": "Fix a broken item"
+      },
+      "status": {
+        "pending": "Awaiting GM",
+        "returned": "Returned",
+        "available": "Available",
+        "active": "In progress",
+        "materials": "Needs materials",
+        "ready": "Ready to roll",
+        "rolled": "Awaiting GM verdict",
+        "complete": "Complete"
+      },
+      "group": {
+        "ready": "Needs a roll or Finish",
+        "active": "On the bench",
+        "available": "Available",
+        "pending": "Proposed"
+      },
+      "cat": {
+        "cheap": "Cheap",
+        "everyday": "Everyday",
+        "costly": "Costly",
+        "premium": "Premium",
+        "expensive": "Expensive",
+        "veryExpensive": "Very Expensive",
+        "luxury": "Luxury",
+        "superLuxury": "Super Luxury"
+      },
+      "up": {
+        "humanity": "Reduce Humanity Loss by 1d6 (cyberware, 2d6+ loss)",
+        "slot": "Add an option/attachment slot",
+        "repairTime": "Halve repair time",
+        "conceal": "Make a one-handed weapon concealable",
+        "excellent": "Raise an Average weapon to Excellent",
+        "exoticSlot": "Attachment slot for an Exotic Weapon",
+        "exoticAmmo": "Exotic Weapon fires one Non-Basic ammo",
+        "sp": "+1 SP",
+        "nomad": "Nomad vehicle upgrade (Rank 1)",
+        "invented": "An invented upgrade"
+      },
+      "f": {
+        "name": "Name",
+        "namePhFabricate": "What are you making? (e.g. Heavy Pistol)",
+        "namePhInvent": "What do you call it?",
+        "item": "Item",
+        "pickItem": "Pick from your gear…",
+        "dropHint": "or drop any item here (e.g. a crewmate's)",
+        "upgrade": "Upgrade",
+        "category": "Price Category",
+        "skill": "Skill",
+        "notes": "Notes",
+        "function": "Function and mechanism",
+        "damage": "What's broken?",
+        "functionPh": "What does it do, and how does it work, in terms of existing tech?",
+        "damagePh": "What's damaged, and how?",
+        "upgradePh": "Anything the GM should know.",
+        "notesPh": "Anything the GM should know.",
+        "gmReview": "GM: set the job",
+        "hours": "Hours of work",
+        "progress": "Hours done",
+        "materials": "Materials",
+        "materialsReady": "Materials acquired",
+        "defaults": "Apply",
+        "rules": "Rules",
+        "rulesPh": "What it does in play (inventions, invented upgrades)",
+        "gmNote": "Note to the player",
+        "gmNotePh": "Shown on the project (e.g. why it was returned)",
+        "defaultsTip": "Fill DV, hours and materials from the Maker table for this Price Category.",
+        "image": "Image",
+        "imageHint": "Click, drop or paste an image (a sketch, the finished look), or paste a link below",
+        "imageUpload": "Upload",
+        "imageBrowse": "Browse",
+        "imageClear": "Remove",
+        "imageUrl": "…or paste a link to an image (https://…)",
+        "hideDV": "Hide DV from the player",
+        "hideDVTip": "The player sees \"?\" for the DV and no chance; the GM still sees it.",
+        "custom": "Custom",
+        "time": "Time",
+        "upgradeHelp": "One Upgrade Expertise upgrade per item.",
+        "categoryHelpFabricate": "The item's price in the rulebook. Sets the DV, time and materials.",
+        "categoryHelpItem": "Set from the item's price (vehicle upgrades always count as Very Expensive).",
+        "categoryHelpInvent": "You set it from similar items: Expensive or more.",
+        "skillHelp": "The TECH skill used to repair this kind of item.",
+        "hoursHelp": "Presets follow the Maker table; a day is {day}h of work (module setting).",
+        "materialsHelp": "Shown to the player, never deducted. Leave empty if nothing needs buying."
+      },
+      "log": {
+        "propose": "Proposed {name}",
+        "revise": "Revised {name}",
+        "delete": "Deleted {name}",
+        "approved": "GM approved {name}",
+        "returned": "GM returned {name}",
+        "work": "Worked {n}h: {parts}",
+        "success": "{name}: {total}, success",
+        "fail": "{name}: {total}, failed",
+        "adjust": "GM adjusted hours",
+        "downtime": "Downtime: {n}h of Tech work",
+        "prototype": "Prototype of {name} started",
+        "again": "Fabricating {name} again",
+        "rolled": "{name}: rolled {total}, waiting for the GM",
+        "finish": "Finished {name}",
+        "expired": "{n}h unspent from the last downtime lost"
+      },
+      "failureHintInvent": "Back to the drawing board: the hours so far are lost.",
+      "halfwayNotice": "{name} is halfway: roll the Maker check to see if the design works.",
+      "inventedNotice": "{name} is invented: Fabricate Prototype before anyone else can claim it.",
+      "rollHalfway": "Roll halfway check",
+      "halfwayTip": "Check at {n}h",
+      "halfwayAt": "Halfway check at {n}h",
+      "chanceTip": "Chance to beat DV {dv} with +{bonus} and 1d10, counting criticals (10 adds a d10, 1 subtracts one).",
+      "rulebook": "Rulebook for {category}: DV {dv} · {time} · materials {materials}",
+      "rulebookNoCategory": "Pick a Price Category above for the rulebook DV, time and materials.",
+      "imageNoGM": "A GM needs to be online to store the image.",
+      "imageFailed": "The image couldn't be stored.",
+      "imageBadUrl": "That link didn't load as an image.",
+      "pendingGM": "Rolled {total} vs DV {dv} ({verdict}):",
+      "pendingPlayer": "Rolled {total}: waiting for the GM.",
+      "beatsDV": "beats the DV",
+      "missesDV": "doesn't beat the DV",
+      "succeed": "Succeed",
+      "fail": "Fail",
+      "alreadyResolved": "That roll has already been decided.",
+      "noSpecialty": "The Tech Role item has no {name} ability to roll.",
+      "needsMaterials": "The materials haven't been acquired yet: the GM ticks them off before work can start.",
+      "dvHiddenTip": "Hidden from the player",
+      "finish": "Finish",
+      "mainBlocked": "The main project isn't taking hours (roll, materials or Finish first).",
+      "bankExpires": "All hours are lost when downtime next occurs.",
+      "setting": {
+        "workDay": "Workshop: hours in a day of Tech work",
+        "workDayHint": "Converts the Maker table's days, weeks and months into hours of Tech work. 8: a working day (1 week = 56h). 16: every waking hour (1 week = 112h). Projects already approved keep their hours.",
+        "workDay8": "8 hours (working day)",
+        "workDay16": "16 hours (every waking hour)"
+      },
+      "time": {
+        "1h": "1 hour",
+        "6h": "6 hours",
+        "1d": "1 day",
+        "1w": "1 week",
+        "2w": "2 weeks",
+        "1m": "1 month",
+        "perTenK": "1 month per 10,000eb",
+        "months": "{n} months ({hours}h)",
+        "month1": "1 month ({hours}h)"
+      },
+      "typeRule": {
+        "fabricate": "Make an existing item (or a finished invention). Materials: one Price Category lower (Super Luxury: half the price). Failure: start over, materials kept.",
+        "invent": "Pitch the function and how it works; the GM sets the Price Category (Expensive+) and writes the rules. Check at halfway; failure: back to the drawing board. Then fabricate it.",
+        "upgrade": "One upgrade per item. Materials: the item's own Price Category (vehicles: Very Expensive). Failure: start over, item and materials fine.",
+        "repair": "Field Expertise adds its rank. DV and time follow the item's Price Category unless the GM says otherwise. No Workshop slots."
+      },
+      "sec": {
+        "required": "Required",
+        "requiredHint": "the GM can't review it without these",
+        "optional": "Helps the GM",
+        "optionalHint": "optional",
+        "check": "Check and time",
+        "materials": "Materials",
+        "player": "Shown to the player",
+        "process": "What happens next",
+        "processNow": "Where this project is",
+        "requiredHintGM": "what the player had to give"
+      },
+      "stillNeeded": "Still needed: {fields}",
+      "estimateNoCategory": "Pick a Price Category to see the DV, time and materials.",
+      "estimateNoItem": "Pick the item to see the DV, time and materials.",
+      "expect": "What to expect (the GM confirms)",
+      "expectHint": "From the Maker table. The GM can change any of it.",
+      "chanceN": "{n}% chance",
+      "step": {
+        "propose": "Propose",
+        "review": "GM review",
+        "materials": "Materials",
+        "work": "Work",
+        "halfway": "Halfway check",
+        "check": "Maker check",
+        "finishWork": "Finish work",
+        "done": "Done"
+      },
+      "who": {
+        "gm": "GM",
+        "tech": "Tech"
+      },
+      "next": {
+        "draft": "Send it to the GM. The GM sets the DV, time and materials, then approves it or sends it back.",
+        "returned": "Returned by the GM: read the note, revise and send again.",
+        "pending": "Waiting for the GM to review it.",
+        "materials": "Waiting for materials: buy them, then the GM marks them acquired.",
+        "available": "Put it on the bench to spend hours on it.",
+        "active": "Spend Unassigned Hours on the bench.",
+        "ready": "Hours are in: roll the Maker check.",
+        "rolled": "Rolled: waiting for the GM to call it.",
+        "complete": "Complete: Finish it to clear the slot; the GM hands out the result.",
+        "completeInvent": "Invented: Fabricate Prototype to build it.",
+        "finished": "Finished."
+      }
+    },
+    "Trauma": {
+      "title": "Trauma Team",
+      "none": "No coverage",
+      "status": {
+        "active": "Covered",
+        "lapsed": "Lapsed"
+      },
+      "sponsored": "Paid by {sponsor}: not billed",
+      "member": "Member {id}",
+      "lapsed": "Lapsed (unpaid: not covered)",
+      "sponsorPlaceholder": "Paid by (blank: billed with Lifestyle)",
+      "activated": "{plan} coverage active. Billed monthly with your Lifestyle.",
+      "ended": "Your coverage has ended.",
+      "noGM": "A GM needs to be online to change Trauma Team coverage."
+    },
+    "Apps": {
+      "title": "App subscriptions",
+      "none": "No app subscriptions.",
+      "lapsed": "Lapsed: not billed",
+      "sponsored": "Paid by {sponsor}: not billed",
+      "hint": "Subscribe and cancel in the App Store on the Agent. Active ones are billed monthly with Lifestyle."
+    },
+    "CrewNotes": {
+      "name": "Crew Notes"
+    },
+    "Upkeep": {
+      "state": {
+        "covered": "Covered by Lifestyle",
+        "exempt": "No upkeep (GM)",
+        "done": "Maintained",
+        "due": "Maintenance due",
+        "neglected": "Neglected",
+        "pending": "Check due",
+        "broken": "Needs repair"
+      },
+      "damaged": "Damaged",
+      "condition": {
+        "none": "nothing wrong",
+        "damaged": "Damaged",
+        "destroyed": "Destroyed",
+        "beyond": "Destroyed Beyond Repair"
+      },
+      "brokenLine": {
+        "destroyed": "Broken: can't be used until repaired with the right Tech Skill. No upkeep until then.",
+        "beyond": "Decimated: it can never be repaired."
+      },
+      "brokenWarn": "{item} is {condition}: repair it before maintaining it.",
+      "hiddenShort": "hidden from players",
+      "malfunctionRoll": "{table} malfunction",
+      "inspectTitle": "{skill}: check {item} for damage (DV{dv})",
+      "inspectWaiting": "Waiting for the GM to say what they find.",
+      "inspectTruth": "Actually: {condition}",
+      "inspectPass": "beat the DV",
+      "inspectFail": "didn't beat the DV",
+      "inspectTell": "Tell them: {condition}",
+      "inspectNothing": "Nothing found",
+      "inspectFound": "Found: it's {condition}.",
+      "inspectFine": "Nothing wrong found.",
+      "noLifestyle": "no Lifestyle",
+      "monthN": "month {n}",
+      "time": {
+        "30min": "30 minutes",
+        "1h": "1 hour",
+        "3h": "3 hours",
+        "1day": "1 day (8 hours)"
+      },
+      "coveredBy": "Your {life} Lifestyle maintains it (needs {need}).",
+      "checkLine": "DV{dv} {skill} · {time} once a month (or a {need} Lifestyle)",
+      "pendingLine": "Time booked: roll the maintenance check.",
+      "lastDone": "Last maintained: {month}",
+      "noSkill": "{name} has no {skill} skill.",
+      "rollTitle": "{skill}: maintain {item} (DV{dv})",
+      "malfunctionTitle": "Malfunction!",
+      "natural1": "Natural 1 on {roll}.",
+      "neglectReason": "A natural 1 with neglected gear: it hasn't been maintained for over a month.",
+      "dur": {
+        "round": "Lasts 1 Round",
+        "minute": "Lasts 1 minute",
+        "hour": "Lasts 1 hour",
+        "day": "Lasts 1 day",
+        "next": "Until it happens (next use)",
+        "now": "Happens right now",
+        "month": "At the start of next month"
+      },
+      "card": {
+        "damaged": "{item} is Damaged",
+        "destroyed": "{item} is Destroyed",
+        "beyond": "{item} is Destroyed Beyond Repair",
+        "repaired": "{item} is no longer Damaged",
+        "fixed": "{item} is repaired",
+        "inspect": "Checking {item} for damage",
+        "inspectText": "{by} rolled {total} vs DV{dv} (1 minute of examination).",
+        "maintained": "{item} maintained",
+        "failed": "{item}: maintenance botched",
+        "maintainedText": "{by} rolled {total} vs DV{dv}. Maintained this month; Damaged and malfunctions cleared.",
+        "failedText": "{by} rolled {total} vs DV{dv}. Halfway through, it went wrong: the time is lost. Book it again."
+      },
+      "table": {
+        "armor": "Armor",
+        "cyberdeck": "Cyberdeck",
+        "limb": "Cyberlimb",
+        "senses": "Cyberaudio / Cyberoptics",
+        "body": "External, Internal & Fashionware",
+        "neural": "Neuralware",
+        "drone": "Drone",
+        "gear": "General Gear & Electronics",
+        "frame": "Linear Frame & Cyberchair",
+        "vehicle": "Vehicle",
+        "weapon": "Weapon"
+      },
+      "pick": "Item to maintain",
+      "other": "Something else (say what in the comments)",
+      "otherHint": "Someone else's gear, or anything not listed. Say what in the comments; the GM tracks it by hand.",
+      "nothingDue": "Nothing of yours needs maintenance right now.",
+      "notesHint": "Anything the GM should know (who helps, where you work...).",
+      "setting": {
+        "malfunctions": "Gear malfunctions on a natural 1",
+        "malfunctionsHint": "Breaking Your Stuff: a natural 1 on an attack or Interface check with a Damaged item rolls its malfunction table in chat for everyone to see; with gear neglected for over a month, it makes the item Damaged.",
+        "off": "Off (GM decides)",
+        "combat": "In combat only",
+        "always": "Always",
+        "neglect": "Neglected gear can become Damaged",
+        "neglectHint": "A natural 1 with gear that skipped a whole month of maintenance gives it the Damaged condition."
+      },
+      "applyPenalty": "Apply the penalty",
+      "applyDamage": "Apply the damage",
+      "skipPenalty": "Not this time",
+      "waitingGM": "Waiting for the GM to apply the penalty.",
+      "applied": "Penalty applied by the GM.",
+      "skipped": "The GM waived the penalty.",
+      "applyFailed": "Couldn't apply the penalty (item or owner gone?).",
+      "effectName": "Malfunction: {item} ({table} {face})",
+      "pen": {
+        "hp": "{n} damage straight to HP",
+        "skillsLine": "{n} to {which}",
+        "attack": "{n} to attacks",
+        "netSpeed": "NET Actions {n}",
+        "ticked": "roll-dialog options, ticked",
+        "unticked": "roll-dialog options, tick them while using the item",
+        "skills": {
+          "all": "all skills",
+          "social": "Social skills",
+          "int": "INT skills",
+          "dexref": "DEX and REF skills",
+          "drive": "driving and piloting"
+        }
+      }
+    }
+  }
+}

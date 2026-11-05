@@ -1,0 +1,28 @@
+<div class="hq-crew">
+  <ul class="crew-list">
+    {{#each crew}}
+    <li class="crew-row {{#if isViewer}}is-viewer{{/if}} {{#if teamMember}}is-team{{/if}}" data-uuid="{{uuid}}">
+      <span class="avatar"><img src="{{img}}" alt=""></span>
+      <span class="crew-name">
+        {{#if canView}}<a data-action="openCrew"><strong>{{name}}</strong></a>{{else}}<strong>{{name}}</strong>{{/if}}
+        <small>{{#if role}}{{role}} · {{/if}}{{player}}</small>
+        {{#if lifestyle}}<small class="crew-lifestyle {{#if canEditLifestyle}}is-editable{{/if}}" {{#if canEditLifestyle}}data-action="editLifestyle"{{/if}} data-tooltip="{{#if canEditLifestyle}}CPRHQ.Crew.lifestyleTipEdit{{else}}CPRHQ.Crew.lifestyleTip{{/if}}"><i class="fa-solid fa-utensils"></i> {{lifestyle.description}} · {{lifestyle.cost}}eb{{#if lifestyle.baseCost}} <s>{{lifestyle.baseCost}}</s>{{/if}}{{#if canEditLifestyle}} <i class="fa-solid fa-pen edit-hint"></i>{{/if}}</small>{{/if}}
+        {{#if healsAs}}<small class="crew-heals" data-tooltip="{{healTooltip}}"><i class="fa-solid fa-heart-pulse"></i> {{localize "CPRHQ.Crew.healsAs" n=healsAs}}</small>{{/if}}
+      </span>
+      <span class="crew-tags">
+        {{#if tenant}}{{#unless @root.isGM}}<i class="fa-solid fa-bed" data-tooltip="CPRHQ.Crew.tenant"></i>{{/unless}}{{/if}}
+      </span>
+      {{#if @root.isGM}}
+      <span class="crew-controls">
+        <a data-action="toggleTenant" class="{{#if tenant}}on{{/if}}" data-tooltip="CPRHQ.Crew.toggleTenant"><i class="fa-solid fa-bed"></i></a>
+        <a data-action="editTeamMember" class="{{#if teamMember}}on{{/if}}" data-tooltip="CPRHQ.Crew.teamMember"><i class="fa-solid fa-user-tie"></i></a>
+        <a data-action="removeCrew" data-tooltip="CPRHQ.Crew.remove"><i class="fa-solid fa-xmark"></i></a>
+      </span>
+      {{/if}}
+    </li>
+    {{else}}
+    <li class="hint">{{localize "CPRHQ.Crew.empty"}}</li>
+    {{/each}}
+    {{#if isGM}}<li class="crew-drop"><i class="fa-solid fa-user-plus"></i> {{localize "CPRHQ.Crew.drop"}}</li>{{/if}}
+  </ul>
+</div>

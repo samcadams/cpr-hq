@@ -1,0 +1,15 @@
+<div class="hq-pages">
+  {{#if canCreatePage}}
+  <header class="panel-head">
+    <span class="spacer"></span>
+    <button type="button" class="btn-sm" data-action="createPage"><i class="fa-solid fa-plus"></i> {{localize "CPRHQ.CreatePage"}}</button>
+  </header>
+  {{/if}}
+  <ul class="note-list">
+    {{#each pages}}
+    <li data-page-id="{{id}}"><a data-action="openPage"><i class="fa-solid fa-file-lines"></i> {{name}}</a> <small>{{type}}</small></li>
+    {{else}}
+    <li class="hint">{{localize "CPRHQ.NoPages"}}</li>
+    {{/each}}
+  </ul>
+</div>

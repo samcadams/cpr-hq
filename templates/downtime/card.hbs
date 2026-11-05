@@ -1,0 +1,100 @@
+{{!-- One character's Housing and Lifestyle. Inputs have no name: lifestyle.mjs writes them straight to the actor. --}}
+<article class="ls-card" data-ls-actor="{{uuid}}">
+  <header>
+    <img src="{{img}}" alt="">
+    <a data-action="openActor"><strong>{{name}}</strong></a>
+    <span class="spacer"></span>
+    <span class="ls-total" data-tooltip="{{localize 'CPRHQ.Lifestyle.totalTip'}}">{{charges.total}}eb / {{localize "CPRHQ.Housing.month"}}</span>
+  </header>
+
+  <div class="ls-grid">
+    <div class="ls-block ls-housing">
+      <h4><i class="fa-solid fa-house"></i> {{localize "CPRHQ.Housing.heading"}}</h4>
+      {{#if home}}
+      <p class="ls-home"><i class="fa-solid fa-building"></i> {{localize "CPRHQ.Housing.atHQ" name=home.name}}</p>
+      {{else}}
+      <select data-ls="housing" {{#unless editable}}disabled{{/unless}}>
+        {{#each housingOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+      {{#if canBuy}}
+      <label class="ls-check"><input type="checkbox" data-ls="purchased" {{#if purchased}}checked{{/if}} {{#unless editable}}disabled{{/unless}}> {{buyLabel}}</label>
+      {{/if}}
+      {{#if check}}<p class="ls-note"><i class="fa-solid fa-dice-d10"></i> {{check}}</p>{{/if}}
+      {{/if}}
+      {{#if housingNote}}<p class="hint">{{housingNote}}</p>{{/if}}
+
+      <label class="ls-check ls-uncomfortable"><input type="checkbox" data-ls="uncomfortable" {{#if uncomfortable}}checked{{/if}} {{#unless editable}}disabled{{/unless}}>
+        {{localize "CPRHQ.Housing.uncomfortable"}}</label>
+      <p class="hint">{{localize "CPRHQ.Housing.uncomfortableHint"}}</p>
+      <details class="ls-explain">
+        <summary>{{localize "CPRHQ.Housing.whatIs"}}</summary>
+        <p class="ls-explain-text">{{localize "CPRHQ.Housing.crammed"}}</p>
+      </details>
+    </div>
+
+    {{!-- Right column: Lifestyle, then Trauma Team and App subscriptions under it --}}
+    <div class="ls-col">
+      <div class="ls-block ls-lifestyle">
+        <h4><i class="fa-solid fa-utensils"></i> {{localize "CPRHQ.Lifestyle.title"}}</h4>
+        <select data-ls="preset" {{#unless editable}}disabled{{/unless}}>
+          {{#if gmSet}}<option value="" selected disabled>{{gmSet}} · {{localize "CPRHQ.Lifestyle.setByGM"}}</option>{{/if}}
+          {{#each presetOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if presetDescription}}<p class="ls-preset-desc">{{presetDescription}}</p>{{/if}}
+        {{#if presetDetails}}
+        {{!-- Black Chrome's breakdown of what the Lifestyle pays for (lifestyle.mjs lifestyleDetails). --}}
+        <details class="ls-explain ls-bc">
+          <summary>{{localize "CPRHQ.Lifestyle.bc.heading"}}</summary>
+          <ul class="ls-bc-list">
+            {{#each presetDetails}}<li><i class="fa-solid {{icon}}" aria-hidden="true"></i> <b>{{label}}</b> {{text}}</li>{{/each}}
+          </ul>
+          <p class="hint">{{localize "CPRHQ.Lifestyle.bc.note"}}</p>
+        </details>
+        {{/if}}
+        {{#if canEditValues}}
+        {{!-- GM only: fine-tune the name and cost, even with a preset chosen --}}
+        <div class="ls-custom">
+          <input type="text" data-ls="description" value="{{lifestyle.description}}" placeholder="{{localize 'CPRHQ.Lifestyle.description'}}">
+          <input type="number" data-ls="cost" value="{{lifestyle.cost}}" min="0" step="1"><span>eb</span>
+        </div>
+        {{/if}}
+        {{#if discount}}<p class="hint"><i class="fa-solid fa-face-smile"></i> {{localize "CPRHQ.Lifestyle.discount" n=discount}}</p>{{/if}}
+      </div>
+
+      {{#if trauma}}
+      {{!-- With the Agent module: its Trauma Team subscription (trauma.mjs). --}}
+      <div class="ls-block ls-trauma">
+        <h4><i class="fa-solid fa-truck-medical"></i> {{localize "CPRHQ.Trauma.title"}}
+          {{#if trauma.statusLabel}}<small class="ls-tt-status ls-tt-{{trauma.status}}">{{trauma.statusLabel}}</small>{{/if}}</h4>
+        <select data-ls="tt-plan" {{#unless trauma.canChoose}}disabled{{/unless}}>
+          <option value="">{{localize "CPRHQ.Trauma.none"}}</option>
+          {{#each trauma.plans}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if trauma.note}}<p class="ls-preset-desc">{{trauma.note}}</p>{{/if}}
+        {{#if trauma.sponsor}}<p class="hint"><i class="fa-solid fa-building-shield"></i> {{localize "CPRHQ.Trauma.sponsored" sponsor=trauma.sponsor}}</p>{{/if}}
+        {{#if trauma.memberId}}<p class="hint"><i class="fa-solid fa-id-card"></i> {{localize "CPRHQ.Trauma.member" id=trauma.memberId}}</p>{{/if}}
+        {{#if trauma.gm}}
+        {{!-- GM only: lapsed (unpaid), and who pays for it (never billed) --}}
+        <label class="ls-check"><input type="checkbox" data-ls="tt-lapsed" {{#if trauma.gm.lapsed}}checked{{/if}}> {{localize "CPRHQ.Trauma.lapsed"}}</label>
+        <input type="text" data-ls="tt-sponsor" value="{{trauma.gm.sponsor}}" placeholder="{{localize 'CPRHQ.Trauma.sponsorPlaceholder'}}">
+        {{/if}}
+      </div>
+      {{/if}}
+
+      {{#if apps}}
+      {{!-- With the Agent module's App Store: monthly app subscriptions, read-only (apps-subs.mjs). --}}
+      <div class="ls-block ls-apps">
+        <h4><i class="fa-solid fa-mobile-screen"></i> {{localize "CPRHQ.Apps.title"}}</h4>
+        {{#if apps.items.length}}
+        <ul class="ls-apps-list">
+          {{#each apps.items}}<li {{#if lapsed}}class="lapsed"{{/if}}><span>{{name}}</span> <span class="ls-apps-price">{{price}}eb</span>{{#if note}} <small>{{note}}</small>{{/if}}</li>{{/each}}
+        </ul>
+        {{else}}
+        <p class="hint">{{localize "CPRHQ.Apps.none"}}</p>
+        {{/if}}
+        <p class="hint">{{localize "CPRHQ.Apps.hint"}}</p>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</article>

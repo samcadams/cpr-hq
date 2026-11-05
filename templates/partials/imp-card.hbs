@@ -1,0 +1,22 @@
+<article class="imp-card status-{{status}} {{#if selected}}is-selected{{/if}}" data-action="inspect" data-inspect="{{key}}"
+         data-search="{{search}}" data-status="{{status}}" {{#if custom}}data-custom{{/if}}>
+  <header>
+    <i class="imp-icon {{icon}}"></i>
+    <div class="imp-title">
+      <strong>{{name}}</strong>
+      {{#if custom}}<span class="badge badge-custom">{{localize "CPRHQ.Custom.badge"}}</span>{{/if}}
+      {{#if (and edited @root.isGM)}}<span class="badge badge-edited">{{localize "CPRHQ.TextEdit.edited"}}</span>{{/if}}
+    </div>
+    <span class="badge badge-{{status}} imp-status">{{statusLabel}}</span>
+  </header>
+
+  <p class="imp-current">{{current}}</p>
+  {{#if next}}<p class="imp-next"><i class="fa-solid fa-angles-up"></i> {{next}}</p>{{/if}}
+
+  <footer>
+    <span class="roles">{{#each roles}}<span class="role">{{this}}</span>{{/each}}</span>
+    <span class="imp-rank" data-tooltip="{{level}}">
+      <span class="tier-dots">{{#each pips}}<span class="dot {{#if filled}}on{{/if}}"></span>{{/each}}</span>
+    </span>
+  </footer>
+</article>

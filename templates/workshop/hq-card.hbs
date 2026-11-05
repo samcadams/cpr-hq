@@ -1,0 +1,28 @@
+{{!-- The HQ's Workshop: rank, what each tier does, and (GM) purchase/upgrade. --}}
+{{!-- Nothing at all for a Tech who isn't crew of an HQ. --}}
+{{#unless workshop.none}}
+<aside class="ws-hq {{#if workshop.rank}}has-workshop{{/if}}">
+  <div class="ws-hq-head">
+    <i class="fa-solid fa-screwdriver-wrench"></i>
+    <div>
+      <strong>{{#if workshop.rank}}{{workshop.view.name}}{{else}}{{localize "CPRHQ.Workshop.noWorkshop"}}{{/if}}</strong>
+      <a class="ws-hq-link" data-ws-action="openHQ" data-uuid="{{workshop.entryUuid}}"><i class="fa-solid fa-building"></i> {{workshop.hqName}}</a>
+    </div>
+    <span class="spacer"></span>
+    {{#with workshop.view}}{{> "cpr-hq.pips"}}{{/with}}
+  </div>
+  {{#if workshop.accessNote}}<p class="hint"><i class="fa-solid fa-door-closed"></i> {{workshop.accessNote}}</p>{{/if}}
+  <ol class="ws-tiers">
+    {{#each workshop.view.ladder}}
+    <li class="tier-{{state}}" data-tooltip="{{text}}"><span class="tier-label">{{label}}</span> {{summary}}
+      {{#if (eq state "next")}}{{#if ../workshop.canAdvance}}<span class="tier-cost">{{cost}} IP</span>{{/if}}{{/if}}</li>
+    {{/each}}
+  </ol>
+  {{#if workshop.canAdvance}}
+  <button type="button" class="btn-sm btn-primary" data-ws-action="advanceWorkshop" data-uuid="{{workshop.entryUuid}}"
+          {{#if workshop.view.action.blocked}}disabled data-tooltip="{{workshop.view.action.blocked}}"{{/if}}>
+    <i class="fa-solid {{#if workshop.rank}}fa-arrow-up{{else}}fa-cart-shopping{{/if}}"></i> {{workshop.view.action.label}} ({{workshop.view.action.cost}} HQ IP)
+  </button>
+  {{/if}}
+</aside>
+{{/unless}}

@@ -1,0 +1,30 @@
+<div class="topbar-wrap">
+<header class="topbar">
+<div class="topbar-main">
+  <figure class="hq-image {{#if editable}}editable{{/if}}" {{#if editable}}data-action="editImage" data-tooltip="CPRHQ.EditImage"{{/if}}>
+    {{#if hq.profile.img}}<img src="{{hq.profile.img}}" alt="">{{else}}<i class="fa-solid fa-building"></i>{{/if}}
+  </figure>
+  <input class="hq-name" type="text" name="name" value="{{document.name}}" placeholder="{{localize 'Name'}}" {{disabled disabled}}>
+  <span class="badge status-{{hq.status}}">{{localize statusLabel}}</span>
+  {{#if hq.isFaction}}<span class="badge mode-faction" data-tooltip="CPRHQ.FactionLocked"><i class="fa-solid fa-lock"></i> {{localize modeLabel}}</span>{{/if}}
+  {{!-- Players have no GM buttons, so their stats sit at the right edge --}}
+  {{#unless isGM}}<span class="spacer"></span>{{/unless}}
+  <div class="top-stat"><label>{{localize "CPRHQ.Stat.ip"}}</label><strong>{{hq.ip.unspent}}</strong><small>/ {{hq.ip.earned}} {{localize "CPRHQ.Stat.earned"}}</small></div>
+  <div class="top-stat"><label>{{localize "CPRHQ.Stat.rent"}}</label><strong>{{rentLabel}}eb</strong>{{#if rentReduced}}<small><s>{{baseRentLabel}}</s></small>{{/if}}</div>
+  <div class="top-stat"><label>{{localize "CPRHQ.Stat.beds"}}</label><strong>{{bedsLabel}}</strong></div>
+  {{#if dateLabel}}<div class="top-stat {{#if datePending}}is-held{{/if}}" {{#if datePending}}data-tooltip="{{localize 'CPRHQ.Stat.dateHeld' span=datePending live=dateLive}}"{{/if}}>
+    <label>{{localize "CPRHQ.Stat.date"}}</label><strong>{{dateLabel}}</strong>
+    {{#if datePending}}<small class="date-pending"><i class="fa-solid fa-hourglass-half"></i> {{localize "CPRHQ.Stat.datePending" span=datePending}}</small>{{/if}}
+  </div>{{/if}}
+  <span class="spacer"></span>
+  {{#if isGM}}
+  <button type="button" data-action="billMonth" data-tooltip="CPRHQ.Bill.tooltip">
+    <i class="fa-solid fa-file-invoice-dollar"></i> {{#if billMonthLabel}}{{localize "CPRHQ.Bill.buttonMonth" month=billMonthLabel}}{{else}}{{localize "CPRHQ.Bill.button"}}{{/if}}
+  </button>
+  <button type="button" data-action="awardIP"><i class="fa-solid fa-star"></i> {{localize "CPRHQ.Award.button"}}</button>
+  <button type="button" class="btn-icon" data-action="hqSettings" data-tooltip="CPRHQ.Settings.title"><i class="fa-solid fa-gear"></i></button>
+  {{/if}}
+</div>
+{{#if benefitStrip}}{{> "cpr-hq.benefit-strip" benefitStrip}}{{/if}}
+</header>
+</div>

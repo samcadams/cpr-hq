@@ -1,0 +1,55 @@
+{{!-- Bench: the main project gets the hours; a Workshop adds slots that get the same hours for free. --}}
+<div class="ws-bench {{#if compact}}compact{{/if}}">
+  <div class="ws-slots" style="--slots: {{bench.length}}">
+    {{#each bench}}
+    <div class="ws-slot {{#if locked}}locked{{/if}} {{#if project}}filled{{/if}} {{#if idle}}idle{{/if}}" data-ws-slot="{{slot}}">
+      <div class="ws-slot-label">
+        {{#if (eq slot 0)}}<i class="fa-solid fa-hammer"></i>{{else}}<i class="fa-solid fa-screwdriver-wrench"></i>{{/if}}
+        {{label}}
+        {{#if project.workable}}<span class="ws-gain" data-ws-gain="{{slot}}">+{{gain}}h</span>{{/if}}
+      </div>
+      {{#if locked}}
+      <p class="ws-slot-empty"><i class="fa-solid fa-lock"></i> {{lockText}}</p>
+      {{else if project}}
+      {{#with project}}
+      <div class="ws-slot-body" data-ws-project="{{id}}">
+      <div class="ws-slot-project" style="--ws: {{color}}" {{#if ../../owner}}draggable="true" data-ws-drag="{{id}}"{{/if}}>
+        <i class="{{icon}}"></i>
+        <strong>{{name}}</strong>
+        {{#if ../../owner}}<button type="button" class="btn-icon ws-x" data-ws-action="unbench" data-tooltip="CPRHQ.Workshop.unbench"><i class="fa-solid fa-xmark"></i></button>{{/if}}
+        <div class="ws-bar"><span style="width: {{pct}}%"></span>{{#if halfway}}<i class="ws-half" style="left: {{halfwayPct}}%"></i>{{/if}}</div>
+        <small>{{progress}} / {{hours}}h</small>
+        <span class="badge ws-badge-{{status}}">{{statusLabel}}</span>
+      </div>
+      {{#if pending}}<p class="ws-slot-note hint"><i class="fa-solid fa-dice-d10"></i> {{pending.text}}</p>{{/if}}
+      {{#if (or canRoll canFinish canPrototype canResolve)}}
+      <div class="ws-slot-actions">
+        {{#if canRoll}}<button type="button" class="btn-sm btn-primary" data-ws-action="roll"><i class="fa-solid fa-dice-d10"></i> {{rollLabel}}</button>{{/if}}
+        {{#if canResolve}}
+        <button type="button" class="btn-sm" data-ws-action="succeed"><i class="fa-solid fa-check"></i> {{localize "CPRHQ.Workshop.succeed"}}</button>
+        <button type="button" class="btn-sm btn-danger" data-ws-action="fail"><i class="fa-solid fa-xmark"></i> {{localize "CPRHQ.Workshop.fail"}}</button>
+        {{/if}}
+        {{#if canFinish}}<button type="button" class="btn-sm btn-primary" data-ws-action="finish"><i class="fa-solid fa-flag-checkered"></i> {{localize "CPRHQ.Workshop.finish"}}</button>{{/if}}
+        {{#if canPrototype}}<button type="button" class="btn-sm btn-primary" data-ws-action="prototype"><i class="fa-solid fa-industry"></i> {{localize "CPRHQ.Workshop.prototype"}}</button>{{/if}}
+      </div>
+      {{/if}}
+      </div>
+      {{/with}}
+      {{#if idle}}<p class="ws-idle hint"><i class="fa-solid fa-circle-exclamation"></i> {{idleText}}</p>{{/if}}
+      {{else}}
+      <p class="ws-slot-empty">{{#if ../owner}}{{localize "CPRHQ.Workshop.dropProject"}}{{else}}—{{/if}}</p>
+      {{/if}}
+    </div>
+    {{/each}}
+  </div>
+  {{#if owner}}
+  <div class="ws-work">
+    <input type="range" min="0" max="{{work.max}}" step="1" value="{{work.hours}}" data-ws-hours {{#if work.disabled}}disabled{{/if}}>
+    <input type="number" min="0" max="{{work.max}}" step="1" value="{{work.hours}}" data-ws-hours {{#if work.disabled}}disabled{{/if}}>
+    <button type="button" class="btn-primary" data-ws-action="work" {{#if work.disabled}}disabled{{/if}}>
+      <i class="fa-solid fa-hammer"></i> <span data-ws-work-label>{{localize "CPRHQ.Workshop.workN" n=work.hours}}</span>
+    </button>
+    {{#if work.reason}}<span class="hint">{{work.reason}}</span>{{/if}}
+  </div>
+  {{/if}}
+</div>

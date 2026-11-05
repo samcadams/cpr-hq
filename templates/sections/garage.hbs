@@ -1,0 +1,21 @@
+<div class="hq-garage">
+  <ul class="crew-list facility-list">
+    {{#each vehicles}}
+    <li class="crew-row facility-row" data-uuid="{{uuid}}">
+      <span class="avatar"><img src="{{img}}" alt=""></span>
+      <span class="crew-name">
+        {{#if canView}}<a data-action="openItem"><strong>{{name}}</strong></a>{{else}}<strong>{{name}}</strong>{{/if}}
+        {{#if owner}}<small>{{owner}}</small>{{/if}}
+      </span>
+      {{#if @root.isGM}}
+      <span class="crew-controls">
+        <a data-action="removeVehicle" data-tooltip="CPRHQ.Garage.remove"><i class="fa-solid fa-xmark"></i></a>
+      </span>
+      {{/if}}
+    </li>
+    {{else}}
+    <li class="hint">{{localize "CPRHQ.Garage.empty"}}</li>
+    {{/each}}
+    {{#if isGM}}<li class="crew-drop"><i class="fa-solid fa-car-side"></i> {{localize "CPRHQ.Garage.drop"}}</li>{{/if}}
+  </ul>
+</div>

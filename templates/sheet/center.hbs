@@ -1,0 +1,28 @@
+<main class="board-center">
+  {{#if alerts.length}}
+  <div class="alerts">
+    {{#each alerts}}
+    <div class="alert alert-{{level}}" data-alert-id="{{id}}">
+      <i class="{{icon}}"></i><span>{{text}}</span>
+      {{#each actions}}<button type="button" class="btn-sm" data-action="alertAction" data-alert-action="{{name}}">{{localize label}}</button>{{/each}}
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+  <div class="panel center-panel">
+    <nav class="center-tabs tabs" data-group="page">
+      {{#each sections}}
+      <button type="button" class="center-tab {{cssClass}}" data-action="tab" data-group="{{group}}" data-tab="{{id}}">
+        <i class="{{icon}}"></i> {{localize label}}
+      </button>
+      {{/each}}
+    </nav>
+    <div class="center-body">
+      {{#each sections}}
+      <section class="center-page tab {{cssClass}}" data-group="{{group}}" data-tab="{{id}}" data-section-id="{{id}}">
+        {{> (lookup this "template") ctx}}
+      </section>
+      {{/each}}
+    </div>
+  </div>
+</main>

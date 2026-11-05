@@ -1,0 +1,15 @@
+{{!-- HQ Workshop page: the improvement itself (folded), then one of the crew's Techs and their projects. --}}
+<div class="facility-page ws-hq-page">
+  <details class="ws-about">
+    <summary><i class="fa-solid fa-screwdriver-wrench"></i> {{localize "CPRHQ.Workshop.aboutImprovement"}}</summary>
+    {{#with facility}}{{> "cpr-hq.imp-detail" page=true textEditing=../textEditing}}{{/with}}
+  </details>
+  {{#if (gt wsTechs.length 1)}}
+  <nav class="ws-techs">
+    {{#each wsTechs}}
+    <button type="button" class="ws-tech {{#if active}}active{{/if}}" data-ws-tech="{{uuid}}"><img src="{{img}}" alt=""> {{name}}</button>
+    {{/each}}
+  </nav>
+  {{/if}}
+  {{> "cpr-hq.ws-panel" workshopPanel}}
+</div>

@@ -1,0 +1,23 @@
+<div class="my-benefits">
+  {{#if hq.isFaction}}<p class="hint"><i class="fa-solid fa-lock"></i> {{localize "CPRHQ.Chip.faction"}}</p>{{/if}}
+  {{#unless hq.hasAccess}}<p class="hint"><i class="fa-solid fa-ban"></i> {{localize "CPRHQ.Chip.noAccess"}}</p>{{/unless}}
+  {{!-- GM overview: crew-wide benefits once, then each member's extra Role / tenant benefits. Details on hover. --}}
+  {{#if anyChips}}
+  <dl class="crew-benefits">
+    {{#if sharedChips.length}}
+    <dt>{{localize "CPRHQ.Chip.everyone"}}</dt>
+    <dd class="chips chips-compact">{{#each sharedChips}}{{> chip}}{{/each}}</dd>
+    {{/if}}
+    {{#each members}}
+    <dt>{{name}}</dt>
+    <dd class="chips chips-compact">{{#each chips}}{{> chip}}{{/each}}</dd>
+    {{/each}}
+  </dl>
+  {{else}}
+  <p class="hint">{{localize "CPRHQ.Chip.noneCrew"}}</p>
+  {{/if}}
+</div>
+
+{{#*inline "chip"}}
+<span class="chip chip-{{kind}}" {{#if tip}}data-tooltip="{{tip}}" data-tooltip-class="cpr-hq-tooltip"{{/if}}><i class="{{icon}}"></i> {{label}}</span>
+{{/inline}}

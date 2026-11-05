@@ -1,0 +1,15 @@
+{
+  "_id": "cprhqDowntime001",
+  "_key": "!macros!cprhqDowntime001",
+  "name": "Open Downtime / Lifestyle",
+  "type": "script",
+  "scope": "global",
+  "img": "icons/svg/clockwork.svg",
+  "command": "// Opens CPR HQ's Downtime/Lifestyle window.\n// GM: every player character. Player: your own character.\ngame.modules.get(\"cpr-hq\")?.api?.openDowntime();",
+  "author": null,
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "flags": {},
+  "_stats": { "coreVersion": "12.343", "systemId": "cyberpunk-red-core", "systemVersion": "0.92.4" }
+}

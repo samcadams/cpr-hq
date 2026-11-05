@@ -1,0 +1,17 @@
+<aside class="board-left">
+  {{#each sections}}
+  <section class="panel {{#if editing}}is-editing{{/if}}" data-section-id="{{id}}">
+    <h3>
+      <i class="{{icon}}"></i> {{localize label}}
+      {{#if ctx.headerNote}}<small class="{{#if ctx.overBeds}}is-warn{{/if}}">{{ctx.headerNote}}</small>{{/if}}
+      {{#if editToggle}}
+      <button type="button" class="btn-icon panel-edit" data-action="toggleEdit"
+              data-tooltip="{{#if editing}}CPRHQ.DoneEditing{{else}}CPRHQ.Edit{{/if}}">
+        <i class="fa-solid {{#if editing}}fa-check{{else}}fa-pen{{/if}}"></i>
+      </button>
+      {{/if}}
+    </h3>
+    {{> (lookup this "template") ctx}}
+  </section>
+  {{/each}}
+</aside>

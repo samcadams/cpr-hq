@@ -1,0 +1,23 @@
+<div class="hq-activity">
+  <header class="panel-head">
+    <span class="filters">
+      {{#each logFilters}}
+      <button type="button" class="filter {{#if active}}active{{/if}}" data-log-filter="{{id}}">{{localize label}}</button>
+      {{/each}}
+    </span>
+    {{#if isGM}}<button type="button" class="btn-sm" data-action="addLogEntry"><i class="fa-solid fa-pen"></i> {{localize "CPRHQ.Activity.add"}}</button>{{/if}}
+  </header>
+  <ol class="ledger-list">
+    {{#each logRows}}
+    <li class="ledger-row type-{{type}}" data-log-id="{{id}}" data-log-group="{{group}}" data-tooltip="{{tooltip}}">
+      <time>{{date}}</time><i class="{{icon}}"></i><span>{{text}}</span>
+      <strong class="delta">{{delta}}</strong>
+      {{#if @root.isGM}}<a class="log-delete" data-action="deleteLogEntry" data-tooltip="CPRHQ.Activity.delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </li>
+    {{else}}
+    <li class="hint">{{localize "CPRHQ.Activity.empty"}}</li>
+    {{/each}}
+  </ol>
+  <p class="log-empty hint" hidden>{{localize "CPRHQ.Activity.noMatch"}}</p>
+  {{#if logTruncated}}<p class="hint">{{localize "CPRHQ.Activity.truncated" n=logLimit}}</p>{{/if}}
+</div>

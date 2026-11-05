@@ -1,0 +1,77 @@
+{{!-- One project as a row: what you compare at a glance and its next action. A click opens the rest below it. --}}
+<article class="ws-entry {{#if open}}open{{/if}}" data-ws-project="{{id}}" style="--ws: {{color}}">
+  <div class="ws-row" data-ws-action="toggleRow" {{#if draggable}}draggable="true" data-ws-drag="{{id}}"{{/if}} {{#if canDrop}}{{#unless item}}data-ws-item-drop{{/unless}}{{/if}}>
+    <span class="ws-row-name"><i class="ws-type-icon {{icon}}" data-tooltip="{{typeLabel}}"></i> <strong data-tooltip="{{name}}">{{name}}</strong></span>
+    <span class="ws-row-status ws-badge-{{status}}">{{#unless (and grouped (eq status "available"))}}{{statusLabel}}{{/unless}}{{#if made}} <small>{{made}}</small>{{/if}}</span>
+    <span class="ws-row-num">{{#if approved}}{{#if showDV}}{{dv}}{{else}}?{{/if}}{{else}}—{{/if}}{{#if dvHiddenIcon}} <i class="fa-solid fa-eye-slash" data-tooltip="CPRHQ.Workshop.dvHiddenTip"></i>{{/if}}</span>
+    <span class="ws-row-num {{chanceClass}}" {{#if chance}}data-tooltip="{{chanceTip}}"{{/if}}>{{#if chance}}{{chance}}%{{else}}—{{/if}}</span>
+    <span class="ws-row-hours">
+      {{#if hours}}
+      {{#unless (or finished isDesign)}}<span class="ws-bar"><span style="width: {{pct}}%"></span>{{#if halfway}}<i class="ws-half" style="left: {{halfwayPct}}%" data-tooltip="{{localize 'CPRHQ.Workshop.halfwayTip' n=halfway}}"></i>{{/if}}</span>{{/unless}}
+      <small>{{#if (and progress (not finished))}}{{progress}} / {{/if}}{{hours}}h</small>
+      {{else}}<small>—</small>{{/if}}
+    </span>
+    <span class="ws-row-actions">
+      {{#if canAgain}}<button type="button" class="btn-sm" data-ws-action="again"><i class="fa-solid fa-rotate-right"></i> {{localize "CPRHQ.Workshop.fabricateAgain"}}</button>
+      {{else if canRoll}}<button type="button" class="btn-sm btn-primary" data-ws-action="roll"><i class="fa-solid fa-dice-d10"></i> {{rollLabel}}</button>
+      {{else if canResolve}}
+      <button type="button" class="btn-sm" data-ws-action="succeed"><i class="fa-solid fa-check"></i> {{localize "CPRHQ.Workshop.succeed"}}</button>
+      <button type="button" class="btn-sm btn-danger" data-ws-action="fail"><i class="fa-solid fa-xmark"></i> {{localize "CPRHQ.Workshop.fail"}}</button>
+      {{else if canPrototype}}<button type="button" class="btn-sm btn-primary" data-ws-action="prototype"><i class="fa-solid fa-industry"></i> {{localize "CPRHQ.Workshop.prototype"}}</button>
+      {{else if canFinish}}<button type="button" class="btn-sm btn-primary" data-ws-action="finish"><i class="fa-solid fa-flag-checkered"></i> {{localize "CPRHQ.Workshop.finish"}}</button>
+      {{else if canUnbench}}<button type="button" class="btn-sm" data-ws-action="unbench"><i class="fa-solid fa-xmark"></i> {{localize "CPRHQ.Workshop.takeOff"}}</button>
+      {{else if canBench}}<button type="button" class="btn-sm ws-quiet" data-ws-action="bench"><i class="fa-solid fa-hammer"></i> {{localize "CPRHQ.Workshop.toBench"}}</button>
+      {{else if (and canReview (eq status "pending"))}}<button type="button" class="btn-sm btn-primary" data-ws-action="review"><i class="fa-solid fa-user-shield"></i> {{localize "CPRHQ.Workshop.review"}}</button>
+      {{else if canEdit}}<button type="button" class="btn-sm {{#if (eq status "returned")}}btn-primary{{/if}}" data-ws-action="edit"><i class="fa-solid fa-pen"></i> {{localize "CPRHQ.Workshop.revise"}}</button>
+      {{else if (and canReview (eq status "materials"))}}<button type="button" class="btn-sm" data-ws-action="review"><i class="fa-solid fa-user-shield"></i> {{localize "CPRHQ.Edit"}}</button>
+      {{/if}}
+    </span>
+    {{#if rowNote}}<p class="ws-row-note"><i class="fa-solid {{#if pending}}fa-dice-d10{{else}}fa-rotate-left{{/if}}"></i> {{rowNote}}</p>{{/if}}
+  </div>
+  {{#if open}}
+  <div class="ws-detail">
+    {{#if image}}<div class="ws-detail-image" style="background-image: url('{{image}}')" data-ws-action="showImage" data-src="{{image}}" data-title="{{name}}"></div>{{/if}}
+    <div class="ws-detail-main">
+      <small>{{typeLabel}}{{#if upgradeLabel}} · {{upgradeLabel}}{{/if}}{{#if categoryLabel}} · {{categoryLabel}}{{/if}}</small>
+      {{#if details}}<p class="ws-text">{{details}}</p>{{/if}}
+      {{#if rules}}<p class="ws-text ws-rules"><i class="fa-solid fa-scroll"></i> {{rules}}</p>{{/if}}
+      <div class="ws-item {{#if canDrop}}droppable{{/if}}" data-ws-item-drop>
+        {{#if item}}
+        <img src="{{item.img}}" alt="">
+        <a data-ws-action="openItem">{{item.name}}</a>
+        {{#if canDrop}}<button type="button" class="btn-icon ws-x" data-ws-action="unlinkItem" data-tooltip="CPRHQ.Workshop.unlink"><i class="fa-solid fa-link-slash"></i></button>{{/if}}
+        {{else if canDrop}}
+        <span class="ws-item-empty"><i class="fa-solid fa-hand-holding-box"></i> {{localize "CPRHQ.Workshop.dropItem"}}</span>
+        {{else if awaitingItem}}
+        <span class="ws-item-empty"><i class="fa-solid fa-user-shield"></i> {{localize "CPRHQ.Workshop.gmItem"}}</span>
+        {{/if}}
+      </div>
+      {{#if materials}}<p class="ws-materials {{#if materialsReady}}ready{{/if}}"><i class="fa-solid {{#if materialsReady}}fa-box{{else}}fa-box-open{{/if}}"></i> {{materials}}{{#if materialsReady}} <small>· {{localize "CPRHQ.Workshop.materialsReady"}}</small>{{/if}}</p>{{/if}}
+      {{#if gmNote}}{{#unless (eq status "returned")}}<p class="ws-note"><i class="fa-solid fa-user-shield"></i> {{gmNote}}</p>{{/unless}}{{/if}}
+      {{#if lastAttempt}}<p class="hint"><i class="fa-solid fa-dice-d10"></i> {{lastAttempt}}</p>{{/if}}
+      {{#if completed}}<p class="hint"><i class="fa-solid fa-check"></i> {{localize "CPRHQ.Workshop.completedOn" date=completed}}</p>{{/if}}
+    </div>
+    <div class="ws-detail-side">
+      {{#unless (or isDesign finished)}}
+      <ol class="ws-process">{{#each process.steps}}<li class="ws-step {{state}}" data-tooltip="{{label}} ({{who}})"><span>{{label}}</span></li>{{/each}}</ol>
+      <p class="ws-next"><i class="fa-solid fa-arrow-right"></i> {{process.next}}</p>
+      {{/unless}}
+      {{#if approved}}
+      <dl class="ws-stats">
+        <div><dt>DV</dt><dd>{{#if showDV}}{{dv}}{{else}}?{{/if}}</dd></div>
+        <div data-tooltip="{{bonusTip}}"><dt>{{localize "CPRHQ.Workshop.check"}}</dt><dd>+{{bonus}}</dd></div>
+        {{#if chance}}<div data-tooltip="{{chanceTip}}"><dt>{{localize "CPRHQ.Workshop.chance"}}</dt><dd>{{chance}}%</dd></div>{{/if}}
+        <div><dt>{{localize "CPRHQ.Workshop.f.skill"}}</dt><dd>{{skill}}</dd></div>
+      </dl>
+      {{#if halfway}}<p class="hint ws-halfway"><i class="fa-solid fa-flag-checkered"></i> {{localize "CPRHQ.Workshop.halfwayAt" n=halfway}}</p>{{/if}}
+      {{/if}}
+    </div>
+    <footer class="ws-actions">
+      <span class="spacer"></span>
+      {{#unless isDesign}}{{#if canEdit}}<button type="button" class="btn-sm" data-ws-action="edit"><i class="fa-solid fa-pen"></i> {{localize "CPRHQ.Workshop.revise"}}</button>{{/if}}{{/unless}}
+      {{#if canReview}}<button type="button" class="btn-sm" data-ws-action="review"><i class="fa-solid fa-user-shield"></i> {{#if (eq status "pending")}}{{localize "CPRHQ.Workshop.review"}}{{else}}{{localize "CPRHQ.Edit"}}{{/if}}</button>{{/if}}
+      {{#if canDelete}}<button type="button" class="btn-icon" data-ws-action="delete" data-tooltip="CPRHQ.Workshop.delete"><i class="fa-solid fa-trash"></i></button>{{/if}}
+    </footer>
+  </div>
+  {{/if}}
+</article>

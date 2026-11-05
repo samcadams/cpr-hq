@@ -1,0 +1,22 @@
+<div class="hq-lockup">
+  <ul class="crew-list facility-list">
+    {{#each prisoners}}
+    <li class="crew-row facility-row" data-uuid="{{uuid}}">
+      <span class="avatar"><img src="{{img}}" alt=""></span>
+      <span class="crew-name">
+        {{#if canView}}<a data-action="openCrew"><strong>{{name}}</strong></a>{{else}}<strong>{{name}}</strong>{{/if}}
+        <small>{{localize "CPRHQ.Lockup.body" n=body}}{{#if since}} · {{localize "CPRHQ.Lockup.since" date=since}}{{/if}}</small>
+      </span>
+      {{#if @root.isGM}}
+      <span class="crew-controls">
+        <a data-action="tryEscape" data-tooltip="CPRHQ.Lockup.tryEscape"><i class="fa-solid fa-person-running"></i></a>
+        <a data-action="releasePrisoner" data-tooltip="CPRHQ.Lockup.release"><i class="fa-solid fa-xmark"></i></a>
+      </span>
+      {{/if}}
+    </li>
+    {{else}}
+    <li class="hint">{{localize "CPRHQ.Lockup.empty"}}</li>
+    {{/each}}
+    {{#if isGM}}{{#unless lockupFull}}<li class="crew-drop"><i class="fa-solid fa-user-lock"></i> {{localize "CPRHQ.Lockup.drop"}}</li>{{/unless}}{{/if}}
+  </ul>
+</div>

@@ -1,0 +1,176 @@
+{{!-- Downtime: rounds of hour-by-hour schedules for the days since the last settled date (see downtime/model.mjs). --}}
+<section class="dt-section dt-downtime">
+  <header class="panel-head">
+    <h3><i class="fa-solid fa-hourglass-half"></i> {{localize "CPRHQ.Downtime.heading"}}</h3>
+    <span class="spacer"></span>
+    {{#if settledLabel}}<small>{{localize "CPRHQ.Downtime.settledOn" date=settledLabel}}</small>{{/if}}
+    {{#if pendingLabel}}<small class="dt-pending"><i class="fa-solid fa-hourglass-half"></i> {{localize "CPRHQ.Stat.datePending" span=pendingLabel}}</small>{{/if}}
+    {{#if behindLabel}}<small class="dt-pending" data-tooltip="CPRHQ.Downtime.behindTip"><i class="fa-solid fa-triangle-exclamation"></i> {{behindLabel}}</small>{{/if}}
+    {{#if isGM}}<button type="button" class="btn-sm" data-dt-action="missionIP" data-tooltip="CPRHQ.Training.missionIPTip"><i class="fa-solid fa-bullseye"></i> {{localize "CPRHQ.Training.missionIP"}}</button>{{/if}}
+    {{#if isGM}}<button type="button" class="btn-sm" data-dt-action="shiftDates" data-tooltip="CPRHQ.Downtime.shiftTip"><i class="fa-solid fa-calendar-days"></i> {{localize "CPRHQ.Downtime.shift"}}</button>{{/if}}
+    {{#if isGM}}<button type="button" class="btn-sm dt-activities-btn" data-dt-action="activities" data-tooltip="CPRHQ.Downtime.editActivitiesTip"><i class="fa-solid fa-list-check"></i> {{localize "CPRHQ.Downtime.editActivities"}}</button>{{/if}}
+  </header>
+
+  {{#if round}}
+  <div class="dt-round">
+
+    {{#if isGM}}
+    {{!-- GM: who's in the round --}}
+    <div class="dt-targets">
+      {{#if round.planning}}
+      <button type="button" class="dt-target {{#if (eq target 'party')}}active{{/if}}" data-dt-action="target" data-uuid=""><i class="fa-solid fa-users"></i> {{localize "CPRHQ.Downtime.party"}}</button>
+      {{/if}}
+      {{#each participants}}
+      <button type="button" class="dt-target {{#if (eq ../target uuid)}}active{{/if}} status-{{status}}" data-dt-action="target" data-uuid="{{uuid}}">
+        {{name}}{{#if ../round.open}} <i class="{{icon}}" data-tooltip="{{statusLabel}}"></i>{{/if}}{{#if custom}} <i class="fa-solid fa-crosshairs" data-tooltip="{{localize 'CPRHQ.Downtime.customMissionTip'}}"></i>{{/if}}
+      </button>
+      {{/each}}
+    </div>
+
+    {{#if round.planning}}
+    <p class="hint">{{localize "CPRHQ.Downtime.planningHint"}}</p>
+    {{#unless (eq target "party")}}
+    <div class="row-actions">
+      {{#if targetCustom}}
+      <span>{{localize "CPRHQ.Downtime.customFor" name=targetName}}</span>
+      <button type="button" class="btn-sm" data-dt-action="partyMission"><i class="fa-solid fa-users"></i> {{localize "CPRHQ.Downtime.usePartyMission"}}</button>
+      {{else}}
+      <span>{{localize "CPRHQ.Downtime.partyFor" name=targetName}}</span>
+      <button type="button" class="btn-sm" data-dt-action="customMission"><i class="fa-solid fa-crosshairs"></i> {{localize "CPRHQ.Downtime.customMission"}}</button>
+      {{/if}}
+    </div>
+    {{/unless}}
+    {{else if draft}}
+    <div class="row-actions">
+      <span class="dt-status status-{{draft.status}}">{{targetName}}: {{draft.statusLabel}}</span>
+      <span class="spacer"></span>
+      {{#if summary.unassigned}}<button type="button" class="btn-sm" data-dt-action="fill" data-uuid="{{target}}"><i class="fa-solid fa-fill-drip"></i> {{localize "CPRHQ.Downtime.fill"}}</button>{{/if}}
+      <button type="button" class="btn-sm" data-dt-action="return" data-uuid="{{target}}"><i class="fa-solid fa-rotate-left"></i> {{localize "CPRHQ.Downtime.return"}}</button>
+      <button type="button" class="btn-sm btn-primary" data-dt-action="approve" data-uuid="{{target}}" {{#if (eq draft.status "approved")}}disabled{{/if}}><i class="fa-solid fa-check"></i> {{localize "CPRHQ.Downtime.approve"}}</button>
+    </div>
+    {{/if}}
+    {{else}}
+    {{!-- Player --}}
+    {{#if mine}}
+    <select data-dt-select="target">{{#each mine}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select>
+    {{/if}}
+    {{#if draft}}
+    {{!-- Where the player's schedule stands, and what to do next. --}}
+    <div class="dt-banner status-{{draft.status}}">
+      <i class="dt-banner-icon {{banner.icon}}"></i>
+      <div class="dt-banner-text">
+        <strong>{{banner.title}}</strong>
+        {{#if (eq draft.status "returned")}}<span>{{localize "CPRHQ.Downtime.returnedToYou"}}</span>{{#if draft.note}}<p class="dt-banner-note">{{draft.note}}</p>{{/if}}
+        {{else if draft.note}}<p class="dt-banner-note">{{draft.note}}</p>{{/if}}
+      </div>
+      {{#if needsFill}}<button type="button" class="btn-primary" data-dt-action="fill" data-uuid="{{target}}" data-tooltip="CPRHQ.Downtime.fillTip"><i class="fa-solid fa-fill-drip"></i> {{localize "CPRHQ.Downtime.fill"}}</button>
+      {{else if canSubmit}}<button type="button" class="btn-primary" data-dt-action="submit" data-uuid="{{target}}" {{#if blockedSubmit}}disabled data-tooltip="CPRHQ.Downtime.detailsFirst"{{/if}}><i class="fa-solid fa-paper-plane"></i> {{localize "CPRHQ.Downtime.submit"}}</button>{{/if}}
+    </div>
+    {{else}}
+    <p class="hint">{{localize "CPRHQ.Downtime.notOpen"}}</p>
+    {{/if}}
+    {{/if}}
+
+    {{#if timeline}}{{> "cpr-hq.downtime-timeline" timeline target=timelineTarget}}{{/if}}
+
+    {{#if summary}}
+    <div class="dt-summary">
+      {{#if summary.unassigned}}<span class="dt-total dt-unassigned">{{localize "CPRHQ.Downtime.unassigned" n=summary.unassigned}}</span>{{/if}}
+      {{#if summary.shortSleep}}<span class="dt-warn" data-tooltip="{{summary.shortSleep.tip}}"><i class="fa-solid fa-bed"></i> {{localize "CPRHQ.Downtime.shortSleep" n=summary.shortSleep.n}}</span>{{/if}}
+      {{#if summary.missing}}<span class="dt-warn dt-missing" data-tooltip="{{summary.missing.tip}}"><i class="fa-solid fa-circle-exclamation"></i> {{localize "CPRHQ.Downtime.missingDetails" n=summary.missing.n}}</span>{{/if}}
+    </div>
+    {{#if summary.notes.length}}
+    <ul class="dt-notes">{{#each summary.notes}}<li><strong>{{name}}</strong> · {{day}}{{#if detail}} · <em>{{detail}}</em>{{/if}}{{#if notes}}: <span>{{notes}}</span>{{/if}}</li>{{/each}}</ul>
+    {{/if}}
+    {{#if summary.costs}}
+    {{!-- Collapsed to the total; hovering opens the list. --}}
+    <div class="dt-costs" tabindex="0">
+      <div class="dt-costs-head"><i class="fa-solid fa-coins"></i> <strong>{{localize "CPRHQ.Downtime.totalCosts"}}</strong> {{summary.costs.total}}
+        <i class="fa-solid fa-chevron-down dt-costs-caret"></i></div>
+      <div class="dt-costs-body"><div>
+        {{#each summary.costs.lines}}<div class="dt-cost-line"><span>{{name}} <small>({{day}})</small></span><span>{{cost}}</span></div>{{/each}}
+        <p class="hint">{{localize "CPRHQ.Downtime.costHint"}}</p>
+      </div></div>
+    </div>
+    {{/if}}
+    {{/if}}
+
+    {{#if isGM}}
+    <div class="row-actions dt-round-actions">
+      <button type="button" class="btn-sm btn-danger" data-dt-action="cancel"><i class="fa-solid fa-xmark"></i> {{localize "CPRHQ.Downtime.cancel"}}</button>
+      <span class="spacer"></span>
+      {{#if round.planning}}
+      <button type="button" class="btn-primary" data-dt-action="release"><i class="fa-solid fa-paper-plane"></i> {{localize "CPRHQ.Downtime.release"}}</button>
+      {{else}}
+      <button type="button" class="{{#if allApproved}}btn-primary{{/if}}" data-dt-action="settle"><i class="fa-solid fa-flag-checkered"></i> {{localize "CPRHQ.Downtime.settle"}}</button>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  {{else}}
+  {{#if unsettledDays}}
+  <p>{{localize "CPRHQ.Downtime.unsettled" n=unsettledDays}}</p>
+  {{#if isGM}}<button type="button" class="btn-primary" data-dt-action="start"><i class="fa-solid fa-play"></i> {{localize "CPRHQ.Downtime.start"}}</button>
+  {{else}}<p class="hint">{{localize "CPRHQ.Downtime.waitGM"}}</p>{{/if}}
+  {{else}}
+  <p class="hint">{{localize "CPRHQ.Downtime.upToDate"}}</p>
+  {{/if}}
+  {{/if}}
+
+  {{!-- GM: apply a settled round's results (see apply.mjs) --}}
+  {{#if applyRounds.length}}
+  <div class="dt-apply">
+    <h4><i class="fa-solid fa-square-check"></i> {{localize "CPRHQ.Downtime.apply.title"}}</h4>
+    <p class="hint">{{localize "CPRHQ.Downtime.apply.hint"}}</p>
+    {{#each applyRounds}}
+    <div class="dt-apply-round" data-apply-round="{{id}}">
+      <strong>{{label}}</strong>
+      {{#each characters}}
+      <div class="dt-apply-actor" data-apply-actor="{{uuid}}">
+        <div class="dt-apply-who">{{name}} <small>{{stats}}</small></div>
+        {{#each rows}}
+        <div class="dt-apply-row" data-kind="{{kind}}" data-key="{{key}}" {{#if materials}}data-full="{{value}}" data-materials="{{materials}}"{{/if}}>
+          <span class="dt-apply-name">{{name}} <small>{{#if detail}}{{detail}}{{else}}{{day}}{{/if}}{{#if costText}} · {{costText}}{{/if}}</small></span>
+          {{#if isHeal}}<input type="number" min="0" step="1" value="{{value}}" data-apply-value> <span>HP</span>{{/if}}
+          {{#if formula}}<input type="text" value="{{formula}}" data-apply-value>{{/if}}
+          {{#if isPaid}}
+          {{#if materials}}<label><input type="checkbox" data-apply-materials> {{localize "CPRHQ.Downtime.apply.materials"}}</label>{{/if}}
+          <input type="number" min="0" step="1" value="{{value}}" data-apply-value> <span>eb</span>
+          <label><input type="checkbox" data-apply-confirm> {{localize "CPRHQ.Downtime.apply.confirm"}}</label>
+          {{/if}}
+          <button type="button" class="btn-sm" data-apply-action="apply">{{#if isPaid}}{{localize "CPRHQ.Downtime.apply.deduct"}}{{else if note}}{{localize "CPRHQ.Downtime.apply.postNote"}}{{else}}{{localize "CPRHQ.Downtime.apply.apply"}}{{/if}}</button>
+          <button type="button" class="btn-sm" data-apply-action="skip">{{localize "CPRHQ.Downtime.apply.skip"}}</button>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{!-- Past Days (collapsed by default) --}}
+  <div class="dt-past">
+    <a class="dt-past-toggle" data-dt-action="pastToggle"><i class="fa-solid {{#if past.open}}fa-chevron-down{{else}}fa-chevron-right{{/if}}"></i> {{localize "CPRHQ.Downtime.pastDays"}}</a>
+    {{#if past.open}}
+    {{#if (gt past.choices.length 1)}}
+    <select data-dt-select="past">{{#each past.choices}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select>
+    {{/if}}
+    {{#each past.results}}
+    <div class="dt-apply-results"><strong>{{localize "CPRHQ.Downtime.apply.results"}}</strong> <small>{{label}}</small>
+      <ul>{{#each lines}}<li>{{this}}</li>{{/each}}</ul></div>
+    {{/each}}
+    {{#each past.days}}
+    <div class="dt-mini-row">
+      <span class="dt-day">{{label}}</span>
+      <div class="dt-mini-track">{{#each segments}}<span class="dt-mini-seg" style="left: {{left}}%; width: {{width}}%; --act: {{color}}"
+        data-dt-action="pastBlock" data-day="{{@../index}}" data-seg="{{@index}}"><span class="dt-mini-label"><i class="{{icon}}"></i> {{name}}{{#if caption}}<span class="dt-mini-caption"> · {{caption}}</span>{{/if}}</span></span>{{/each}}</div>
+    </div>
+    {{else}}
+    <p class="hint">{{localize "CPRHQ.Downtime.noHistory"}}</p>
+    {{/each}}
+    {{#if past.more}}<button type="button" class="btn-sm" data-dt-action="pastMore"><i class="fa-solid fa-angles-down"></i> {{localize "CPRHQ.Downtime.loadMore"}}</button>{{/if}}
+    {{/if}}
+  </div>
+</section>
