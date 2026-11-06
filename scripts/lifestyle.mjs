@@ -4,6 +4,7 @@ import { lifestyleModifier, isFullCrew } from "./benefits.mjs";
 import { formatNumber } from "./utils.mjs";
 import { setTrauma, traumaCard, traumaState } from "./trauma.mjs";
 import { appsCard, appsState, appsTip } from "./apps-subs.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * Lifestyle & Housing for characters. Works with or without an HQ: the Downtime/Lifestyle window (macro or the
@@ -67,6 +68,7 @@ export const HOUSING = [
 
 export function registerLifestyleSettings(onChange) {
   game.settings.register(MODULE_ID, PRESETS_SETTING, {
+    name: `CPRHQ.Settings.${PRESETS_SETTING}.name`, hint: `CPRHQ.Settings.${PRESETS_SETTING}.hint`,
     scope: "world",
     config: false,
     type: Array,
@@ -136,7 +138,7 @@ function housingId(actor) {
  * Everything about a character's Lifestyle and Housing, including what the next Lifestyle bill charges.
  * Housing rent isn't charged when the home is bought, company-provided, or the HQ (the HQ bill covers that).
  * With the Agent module, an active paid Trauma Team plan is on the bill too (see trauma.mjs), and so are App Store
- * subscriptions while its App Store is on (apps-subs.mjs).
+ * subscriptions while its App Store is on (apps-subs.mjs); neither while the Agent bills them itself (billAgentPlans off).
  */
 export function lifestyleState(actor) {
   const flag = actor.getFlag(MODULE_ID, HOUSING_FLAG) ?? {};
@@ -147,9 +149,10 @@ export function lifestyleState(actor) {
   const discount = lifestyleDiscount(actor);
   const housingCharge = (home || purchased || housing.provided || (housing.rent === null)) ? 0 : housing.rent;
   const lifestyleCharge = Math.max(0, (life.cost ?? 0) + discount);
+  const billed = rule("billAgentPlans");
   const trauma = traumaState(actor);
-  const traumaCharge = trauma?.charge ?? 0;
-  const apps = appsState(actor);
+  const traumaCharge = billed ? (trauma?.charge ?? 0) : 0;
+  const apps = billed ? appsState(actor) : null;
   const appsCharge = apps?.charge ?? 0;
   return {
     housing, home, purchased, uncomfortable: !!flag.uncomfortable,
@@ -313,7 +316,8 @@ export function lifestyleCard(actor) {
     lifestyle: state.lifestyle,
     discount: state.discount ? formatNumber(state.discount) : null,
     trauma: traumaCard(actor),
-    apps: appsCard(actor),
+    // Read-only, for the bill: gone while the Agent bills subscriptions itself.
+    apps: rule("billAgentPlans") ? appsCard(actor) : null,
     charges: {
       housing: formatNumber(state.housingCharge),
       lifestyle: formatNumber(state.lifestyleCharge),

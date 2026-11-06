@@ -2,6 +2,7 @@ import { MODULE_ID } from "./constants.mjs";
 import { calendarActive, currentTimestamp } from "./calendar.mjs";
 import { actorRoles } from "./benefits.mjs";
 import { slugify } from "./effects.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * Gear upkeep, after the "Breaking Your Stuff" DLC (optional rules for maintaining and damaging gear).
@@ -313,7 +314,7 @@ export function activeMalfunction(item) {
  * @param {boolean} [options.reveal]  include a hidden condition and malfunction
  */
 export function upkeepStatus(item, { reveal = game.user.isGM } = {}) {
-  if ( !isTracked(item) ) return null;
+  if ( !rule("upkeep") || !isTracked(item) ) return null;
   const actor = item.parent;
   const flag = upkeepFlag(item);
   const hidden = !!flag.hidden;
@@ -684,7 +685,7 @@ function onRenderChat(message, html) {
     wait.classList.add("done");
     return;
   }
-  if ( !game.user.isGM ) return gm?.remove();
+  if ( !game.user.isGM || !rule("upkeep") ) return gm?.remove();
   wait?.remove();
   gm?.addEventListener("click", async event => {
     const button = event.target.closest("[data-cprhq-upkeep]");
@@ -723,7 +724,7 @@ function onRenderInspect(message, html) {
     wait.classList.add("done");
     return;
   }
-  if ( !game.user.isGM ) return gm.remove();
+  if ( !game.user.isGM || !rule("upkeep") ) return gm.remove();
   wait.remove();
   const item = fromUuidSync(data.item);
   const truth = item ? upkeepStatus(item, { reveal: true }) : null;
@@ -789,6 +790,7 @@ function inCombat(actor) {
 
 /** A roll card was posted: a natural 1 with a Damaged item malfunctions it; with a neglected one, damages it. */
 async function onRollCard(cprRoll) {
+  if ( !rule("upkeep") ) return;
   const mode = game.settings.get(MODULE_ID, MALFUNCTION_SETTING);
   if ( mode === "off" ) return;
   if ( (cprRoll?.initialRoll !== 1) || (cprRoll.die !== "d10") || !cprRoll.calculateCritical ) return;
@@ -827,6 +829,7 @@ async function wrapRollCards() {
 
 /** GM, on settling: Gear Maintenance blocks book their hours on the chosen items (the check is rolled later). */
 async function onSettled(round, actors) {
+  if ( !rule("upkeep") ) return;
   const { isMaintenance } = await import("./downtime/model.mjs");
   for ( const actor of actors ) {
     const entry = (actor.getFlag(MODULE_ID, "downtimeHistory") ?? []).findLast(r => r.roundId === round.id);
@@ -862,27 +865,32 @@ async function stampSince(items) {
 export function registerUpkeepSettings() {
   game.settings.register(MODULE_ID, MALFUNCTION_SETTING, {
     name: "CPRHQ.Upkeep.setting.malfunctions", hint: "CPRHQ.Upkeep.setting.malfunctionsHint",
-    scope: "world", config: true, type: String, default: "combat",
+    scope: "world", config: false, type: String, default: "combat",
     choices: { off: "CPRHQ.Upkeep.setting.off", combat: "CPRHQ.Upkeep.setting.combat", always: "CPRHQ.Upkeep.setting.always" }
   });
   game.settings.register(MODULE_ID, NEGLECT_SETTING, {
     name: "CPRHQ.Upkeep.setting.neglect", hint: "CPRHQ.Upkeep.setting.neglectHint",
-    scope: "world", config: true, type: Boolean, default: true
+    scope: "world", config: false, type: Boolean, default: true
   });
+}
+
+/** Upkeep on (at ready, or switched on later): watch roll cards; the GM dates the gear that has no upkeep month yet. */
+export function upkeepSwitchedOn() {
+  wrapRollCards();
+  if ( game.users.activeGM?.isSelf ) stampSince(game.actors.filter(a => a.hasPlayerOwner).flatMap(a => [...a.items]));
 }
 
 export function registerUpkeepHooks() {
   Hooks.on("renderChatMessage", onRenderChat);
   Hooks.on("updateWorldTime", foundry.utils.debounce(() => {
-    if ( game.users.activeGM?.isSelf ) expireMalfunctions();
+    if ( game.users.activeGM?.isSelf && rule("upkeep") ) expireMalfunctions();
   }, 500));
   Hooks.once("ready", () => {
-    wrapRollCards();
-    if ( game.users.activeGM?.isSelf ) stampSince(game.actors.filter(a => a.hasPlayerOwner).flatMap(a => [...a.items]));
+    if ( rule("upkeep") ) upkeepSwitchedOn();
   });
   Hooks.on(`${MODULE_ID}.downtimeSettled`, (round, actors) => onSettled(round, actors));
   Hooks.on("createItem", item => {
-    if ( game.users.activeGM?.isSelf && (item.parent instanceof Actor) ) stampSince([item]);
+    if ( game.users.activeGM?.isSelf && rule("upkeep") && (item.parent instanceof Actor) ) stampSince([item]);
   });
 }
 

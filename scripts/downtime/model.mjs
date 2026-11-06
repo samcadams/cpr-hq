@@ -2,6 +2,7 @@ import { MODULE_ID } from "../constants.mjs";
 import { isHQ, getHQ, updateHQ } from "../hq.mjs";
 import { calendarActive, currentTimestamp, dateLabelAt } from "../calendar.mjs";
 import { actorRoles } from "../benefits.mjs";
+import { rule, parseSleep } from "../rules.mjs";
 
 /**
  * Downtime: players schedule what their characters do, hour by hour, for the in-game days that have passed since
@@ -30,8 +31,8 @@ const ADDED = "downtimeActivitiesAdded";
 const LATER_DEFAULTS = ["fixerOps", "mediaCredibility", "rockerImpact", "execTeamwork", "techMaker", "medtechMedicine", "hustool", "brainwasher"];
 const DRAFT_FLAG = "downtime";
 const HISTORY_FLAG = "downtimeHistory";
-/** Less sleep than this in a day leaves the character Fatigued the next day. */
-export const SLEEP_MINIMUM = 6;
+/** Less sleep than this in a day leaves the character Fatigued the next day (table rule; 0: no short-sleep rule). */
+export const sleepMinimum = () => Math.max(0, Number(rule("sleepMinimum")) || 0);
 
 const loc = key => game.i18n.localize(key);
 
@@ -137,10 +138,11 @@ export const DEFAULT_ACTIVITIES = [
 ];
 
 export function registerDowntimeSettings(onChange) {
-  game.settings.register(MODULE_ID, SETTLED, { scope: "world", config: false, type: Number, default: null, onChange });
-  game.settings.register(MODULE_ID, ROUND, { scope: "world", config: false, type: Object, default: null, onChange });
-  game.settings.register(MODULE_ID, ACTIVITIES, { scope: "world", config: false, type: Array, default: [], onChange });
-  game.settings.register(MODULE_ID, ADDED, { scope: "world", config: false, type: Array, default: [] });
+  const label = key => ({ name: `CPRHQ.Settings.${key}.name`, hint: `CPRHQ.Settings.${key}.hint` });
+  game.settings.register(MODULE_ID, SETTLED, { ...label(SETTLED), scope: "world", config: false, type: Number, default: null, onChange });
+  game.settings.register(MODULE_ID, ROUND, { ...label(ROUND), scope: "world", config: false, type: Object, default: null, onChange });
+  game.settings.register(MODULE_ID, ACTIVITIES, { ...label(ACTIVITIES), scope: "world", config: false, type: Array, default: [], onChange });
+  game.settings.register(MODULE_ID, ADDED, { ...label(ADDED), scope: "world", config: false, type: Array, default: [] });
 }
 
 /** Active GM, on ready: append defaults added since the GM saved their list, once each (a later delete sticks). */
@@ -225,6 +227,7 @@ function hasApp(actor, app) {
 
 /** Can this character do this activity? {ok, reason} — Role, Agent app and HQ upgrade requirements. */
 export function availability(def, actor) {
+  if ( isMaintenance(def) && !rule("upkeep") ) return { ok: false, hidden: true };
   if ( def.role && actor && !actorRoles(actor).has(def.role.toLowerCase()) ) {
     return { ok: false, hidden: true, reason: game.i18n.format("CPRHQ.Downtime.needsRole", { role: def.role }) };
   }
@@ -438,7 +441,7 @@ export async function setMission(uuid, blocks) {
 
 /**
  * A character's schedule for the open round: {status: "draft"|"submitted"|"approved"|"returned", blocks, note}.
- * Until it's first saved, it starts with a night's sleep (22:00-06:00) around their mission hours.
+ * Until it's first saved, it starts with the table's default sleep (22:00-06:00) around their mission hours.
  */
 export function draftFor(actor, round = currentRound()) {
   const flag = actor.getFlag(MODULE_ID, DRAFT_FLAG);
@@ -447,14 +450,14 @@ export function draftFor(actor, round = currentRound()) {
   return { status: flag.status ?? "draft", blocks: flag.blocks ?? [], note: flag.note ?? "" };
 }
 
-/** 22:00-06:00 every night of the round, minus mission hours. */
-export const SLEEP_FROM = 22;
+/** The table's default sleep (22:00-06:00) every night of the round, minus mission hours. */
 export function defaultSleep(round, mission = []) {
+  const { from, hours: length } = parseSleep(rule("defaultSleep"));
   const total = round.days * HOURS;
   const free = coverage(total, mission).map(c => !c);
   const hours = new Array(total).fill(false);
   for ( let night = -1; night < round.days; night++ ) {
-    for ( let h = (night * HOURS) + SLEEP_FROM; h < (night * HOURS) + SLEEP_FROM + 8; h++ ) if ( (h >= 0) && (h < total) && free[h] ) hours[h] = true;
+    for ( let h = (night * HOURS) + from; h < (night * HOURS) + from + length; h++ ) if ( (h >= 0) && (h < total) && free[h] ) hours[h] = true;
   }
   return runs(hours).map(([start, length]) => ({ id: foundry.utils.randomID(), activity: "sleep", start, length }));
 }
@@ -582,7 +585,7 @@ export async function settleRound(actors, { applyFatigue }) {
       [`flags.${MODULE_ID}.-=${DRAFT_FLAG}`]: null
     });
     const lastSleep = sleepPerDay(round, blocks).at(-1) ?? 0;
-    if ( applyFatigue && (lastSleep < SLEEP_MINIMUM) ) await setFatigued(actor, true);
+    if ( applyFatigue && (lastSleep < sleepMinimum()) ) await setFatigued(actor, true);
   }
 
   const seconds = round.days * DAY;

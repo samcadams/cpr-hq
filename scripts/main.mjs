@@ -27,6 +27,8 @@ import { registerUpkeepSettings, registerUpkeepHooks, upkeepAPI } from "./upkeep
 import { healingOf } from "./benefits.mjs";
 import { registerTrainingHooks } from "./training.mjs";
 import { registerContentSettings, contentReady } from "./content.mjs";
+import { registerTableSettings, settingsAPI } from "./settings.mjs";
+import { rule } from "./rules.mjs";
 
 /** Embedded Downtime/Lifestyle panels (api.panels): who they're for, and the per-sheet UI state. */
 const hasLifestyle = actor => (actor?.type === "character") && !!actor.system.lifestyle?.lifeStyle;
@@ -54,6 +56,7 @@ function registerSettings() {
   });
   registerUpkeepSettings();
   registerContentSettings();
+  registerTableSettings();
 }
 
 Hooks.once("ready", () => { initSettled(); mergeNewDefaults(); });
@@ -104,13 +107,15 @@ Hooks.once("init", () => {
     /** Open the HQ's sheet on its Journal tab. */
     openCrewJournal,
     /** A character's settled downtime by day, and the open round as it stands for them. */
-    downtime: { days: downtimeDays, round: downtimeRoundFor },
+    downtime: { days: downtimeDays, round: actor => (rule("downtimeSystem") ? downtimeRoundFor(actor) : null) },
     /** A character's Lifestyle preset and its Black Chrome perks (Combat Cabb's free taxi). */
     lifestyle: { of: lifestyleOf },
     /** A character's best "heal as if BODY were higher" bonus from their HQs: { label, value } or null. */
     healing: { of: healingOf },
     /** Gear upkeep (Breaking Your Stuff): status per item, maintenance checks, Damaged, malfunctions. */
     upkeep: upkeepAPI,
+    /** The module's settings, grouped in setup order: { groups: [{ id, label, hint, menu?, keys }] }. */
+    settings: settingsAPI,
     /**
      * Panels another sheet can embed for one character (e.g. a character sheet tab). Keep one `ui` per sheet,
      * render `{{> partial context}}` inside `<div class="application cpr-hq"><div class="window-content">`,
@@ -136,10 +141,10 @@ Hooks.once("init", () => {
           activateDowntime(element, ui, rerender);
         }
       },
-      /** The Downtime section alone. */
+      /** The Downtime section alone (not without the downtime system). */
       downtime: {
         partial: "cpr-hq.downtime-section",
-        available: hasLifestyle,
+        available: actor => rule("downtimeSystem") && hasLifestyle(actor),
         newUI: actor => panelUI(actor),
         context: (actor, ui) => downtimePanelContext(lifestyleActors({ actors: [actor] }), ui),
         activate: (element, ui, rerender) => activateDowntime(element, ui, rerender)

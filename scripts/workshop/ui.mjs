@@ -2,7 +2,7 @@ import { getHQ } from "../hq.mjs";
 import { getDefinition, improvementView, advanceImprovement } from "../improvements.mjs";
 import {
   PROJECT_TYPES, isTech, techProfile, workshopAccess, crewHQ, benchSize, workshopData, benchPlan, workable,
-  needsRoll, checkAt, materialsOk, resolveRoll,
+  needsRoll, checkAt, halfwayDue, materialsOk, resolveRoll,
   checkBonus, canLinkItem, proposeProject, reviseProject, deleteProject, linkItem, benchProject, unbenchProject, work,
   rollProject, startPrototype, reviewProject, finishProject, designsOf, fabricationOf, fabricateAgain
 } from "./model.mjs";
@@ -54,7 +54,7 @@ function statusOf(p, onBench) {
 
 /**
  * Where a project is in the Maker process, as steps: propose, GM review, materials (if any are listed), work, the
- * Maker check and done. An invention is checked halfway, so it has a second stretch of work after the check.
+ * Maker check and done. A project checked halfway (inventions, by default) has a second stretch of work after the check.
  * @param {object} p           The project (a new one has no id yet)
  * @param {string} [status]    statusOf(); defaults to the project's own
  * @returns {{steps: {key, label, who, state}[], next: string, status: string}}
@@ -62,16 +62,18 @@ function statusOf(p, onBench) {
 export function processSteps(p, status) {
   status ??= p.id ? statusOf(p, false) : "draft";
   const invent = p.type === "invent";
+  // Checked halfway: by the table rule, or already (the rule changed after its check).
+  const twoStage = halfwayDue(p) || !!p.checked;
   const keys = ["propose", "review"];
   if ( p.materials ) keys.push("materials");
-  keys.push("work", invent ? "halfway" : "check");
-  if ( invent ) keys.push("finishWork");
+  keys.push("work", twoStage ? "halfway" : "check");
+  if ( twoStage ) keys.push("finishWork");
   keys.push("done");
   const at = {
     draft: "propose", returned: "propose", pending: "review", materials: "materials",
-    available: (invent && p.checked) ? "finishWork" : "work",
-    active: (invent && p.checked) ? "finishWork" : "work",
-    ready: invent ? "halfway" : "check", rolled: invent ? "halfway" : "check",
+    available: p.checked ? "finishWork" : "work",
+    active: p.checked ? "finishWork" : "work",
+    ready: halfwayDue(p) ? "halfway" : "check", rolled: halfwayDue(p) ? "halfway" : "check",
     complete: "done"
   }[status] ?? "propose";
   const current = p.finished ? keys.length : keys.indexOf(at);
@@ -96,8 +98,8 @@ function projectView(actor, p, { benchIndex, owner, open }) {
   const bonus = checkBonus(actor, p);
   const approved = (p.status === "approved") || (p.status === "complete");
   const last = p.attempts?.at(-1);
-  // Inventions are checked halfway: the bar shows where.
-  const halfway = (p.type === "invent") && !p.checked && hours ? checkAt(p) : null;
+  // Projects checked halfway (inventions, by default): the bar shows where.
+  const halfway = halfwayDue(p) && hours ? checkAt(p) : null;
   const chance = approved && p.dv && showDV ? successChance(bonus.total, p.dv) : null;
   const pending = p.pendingRoll;
   const pendingText = pending ? game.i18n.format(game.user.isGM ? "CPRHQ.Workshop.pendingGM" : "CPRHQ.Workshop.pendingPlayer",

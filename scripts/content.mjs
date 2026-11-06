@@ -76,6 +76,7 @@ export function registerContentSettings() {
   });
   // Whether the GM found the file there; see rescan. Sheets pick it up on reload.
   game.settings.register(MODULE_ID, "contentFound", {
+    name: "CPRHQ.Settings.contentFound.name", hint: "CPRHQ.Settings.contentFound.hint",
     scope: "world", config: false, type: Boolean, default: false,
     onChange: found => found && loadContent()
   });

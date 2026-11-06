@@ -25,6 +25,8 @@ import { currentDateLabel, dateLabelAt } from "../calendar.mjs";
 import { unsettled, DAY } from "../downtime/model.mjs";
 import { holdRender } from "../downtime/timeline.mjs";
 import { formatNumber } from "../utils.mjs";
+import { syncHQ } from "../effects.mjs";
+import { rule } from "../rules.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -70,6 +72,7 @@ export default class HQJournalSheet extends HandlebarsApplicationMixin(DocumentS
       openActor: HQJournalSheet.#onOpenActor,
       billLifestyle: HQJournalSheet.#onBillLifestyle,
       managePresets: HQJournalSheet.#onManagePresets,
+      syncBenefits: HQJournalSheet.#onSyncBenefits,
       removeVehicle: HQJournalSheet.#onRemoveVehicle,
       tryEscape: HQJournalSheet.#onTryEscape,
       releasePrisoner: HQJournalSheet.#onReleasePrisoner,
@@ -177,9 +180,9 @@ export default class HQJournalSheet extends HandlebarsApplicationMixin(DocumentS
 
   /** The date the world's downtime is settled to; days since then still need a downtime round. */
   #dateContext() {
-    // Unapplied time shows once it's at least a day (a round can only cover whole days).
+    // Unapplied time shows once it's at least a day (a round can only cover whole days); not without downtime.
     const { seconds, start } = unsettled();
-    const heldLabel = seconds >= DAY ? dateLabelAt(start) : null;
+    const heldLabel = (seconds >= DAY) && rule("downtimeSystem") ? dateLabelAt(start) : null;
     return {
       dateLabel: heldLabel ?? currentDateLabel(),
       datePending: heldLabel ? formatSpan(seconds) : null,
@@ -529,6 +532,13 @@ export default class HQJournalSheet extends HandlebarsApplicationMixin(DocumentS
 
   static #onManagePresets() {
     return presetsDialog();
+  }
+
+  /** GM, crewEffects "manual": write this HQ's crew benefit effects to the sheets now. */
+  static async #onSyncBenefits() {
+    if ( !game.users.activeGM?.isSelf ) return ui.notifications.warn("CPRHQ.Chip.syncActiveGM", { localize: true });
+    await syncHQ(this.document, { force: true });
+    ui.notifications.info("CPRHQ.Chip.synced", { localize: true });
   }
 
   /** GM: switch an improvement's detail (inspector or facility page) between reading and editing its text. */

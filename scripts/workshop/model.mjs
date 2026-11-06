@@ -2,6 +2,7 @@ import { MODULE_ID } from "../constants.mjs";
 import { isHQ, getHQ } from "../hq.mjs";
 import { actorRoles, isFullCrew } from "../benefits.mjs";
 import { currentDateLabel } from "../calendar.mjs";
+import { rule, checksHalfway, roleList } from "../rules.mjs";
 
 /**
  * Workshop: a Tech's Maker projects (CP:R p.145), independent of any HQ.
@@ -72,7 +73,7 @@ export function workDay() {
 export function registerWorkshopSettings(onChange) {
   game.settings.register(MODULE_ID, WORK_DAY_SETTING, {
     name: "CPRHQ.Workshop.setting.workDay", hint: "CPRHQ.Workshop.setting.workDayHint",
-    scope: "world", config: true, type: Number, default: 16,
+    scope: "world", config: false, type: Number, default: 16,
     choices: Object.fromEntries(WORK_DAY_CHOICES.map(n => [n, `CPRHQ.Workshop.setting.workDay${n}`])),
     onChange
   });
@@ -113,8 +114,11 @@ const text = value => String(value ?? "").trim();
 /*  Characters                                  */
 /* -------------------------------------------- */
 
+/** Does the character get the Workshop: any of the table's Workshop roles (workshopRoles; Tech by default)? */
 export function isTech(actor) {
-  return (actor?.type === "character") && actorRoles(actor).has("tech");
+  if ( actor?.type !== "character" ) return false;
+  const roles = actorRoles(actor);
+  return roleList(rule("workshopRoles")).some(r => roles.has(r));
 }
 
 /** TECH, Maker rank and the four specialty ranks (from the Tech Role item). */
@@ -382,10 +386,15 @@ export async function unbenchProject(actor, id) {
   await save(actor, data);
 }
 
-/** Hours worked before the next Maker check: an invention is checked halfway, everything else at the end. */
+/** Is the project's next Maker check its halfway check (table rule halfwayCheck: inventions, every project, none)? */
+export function halfwayDue(p) {
+  return checksHalfway(p.type, rule("halfwayCheck")) && !p.checked;
+}
+
+/** Hours worked before the next Maker check: halfway for a project checked halfway, else at the end. */
 export function checkAt(p) {
   const hours = int(p.hours);
-  return ((p.type === "invent") && !p.checked) ? Math.max(1, Math.ceil(hours / 2)) : hours;
+  return halfwayDue(p) ? Math.max(1, Math.ceil(hours / 2)) : hours;
 }
 
 /** Have the materials a project lists been acquired (the GM ticks it)? Nothing listed: nothing to wait for. */
@@ -401,7 +410,8 @@ export function workable(p) {
 /** Is a project waiting on its Maker check (and not already rolled, waiting for the GM)? */
 export function needsRoll(p) {
   if ( (p?.status !== "approved") || p.pendingRoll || (int(p.progress) < checkAt(p)) ) return false;
-  return (p.type !== "invent") || !p.checked;
+  // Passed its halfway check: no second roll, the rest of the hours finish it.
+  return !p.checked;
 }
 
 /** Keep the projects that are still on the bench, in the slots this character has. Nothing moves by itself. */
@@ -459,15 +469,17 @@ export async function work(actor, hours) {
   data.bank -= hours;
   const touched = plan.bench.filter(Boolean).map(p => data.projects.find(x => x.id === p.id));
   const ready = touched.filter(needsRoll);
-  // An invention that passed its halfway check is done once the rest of the hours are in.
-  const finished = touched.filter(p => (p.type === "invent") && p.checked && (int(p.progress) >= int(p.hours)));
+  // A project that passed its halfway check is done once the rest of the hours are in.
+  const finished = touched.filter(p => p.checked && (int(p.progress) >= int(p.hours)));
   for ( const p of finished ) {
     p.status = "complete";
     p.completed = currentDateLabel() ?? "";
   }
   await save(actor, data, { type: "work", hours: -hours, text: game.i18n.format("CPRHQ.Workshop.log.work", { n: hours, parts: parts.join(", ") }) });
-  for ( const p of ready ) ui.notifications.info(game.i18n.format(p.type === "invent" ? "CPRHQ.Workshop.halfwayNotice" : "CPRHQ.Workshop.readyNotice", { name: p.name }));
-  for ( const p of finished ) ui.notifications.info(game.i18n.format("CPRHQ.Workshop.inventedNotice", { name: p.name }));
+  for ( const p of ready ) ui.notifications.info(game.i18n.format(halfwayDue(p) ? "CPRHQ.Workshop.halfwayNotice" : "CPRHQ.Workshop.readyNotice", { name: p.name }));
+  for ( const p of finished ) {
+    ui.notifications.info(game.i18n.format(p.type === "invent" ? "CPRHQ.Workshop.inventedNotice" : "CPRHQ.Workshop.completeNotice", { name: p.name }));
+  }
 }
 
 /**
@@ -540,7 +552,7 @@ export async function resolveRoll(actor, id, success) {
   const pending = project?.pendingRoll;
   // Another GM (or the card buttons) may have decided it already.
   if ( !pending ) return ui.notifications.info("CPRHQ.Workshop.alreadyResolved", { localize: true });
-  const halfway = (project.type === "invent") && !project.checked;
+  const halfway = halfwayDue(project);
   project.attempts = [...(project.attempts ?? []), { ...pending, success }];
   delete project.pendingRoll;
   if ( success && halfway ) {
@@ -555,7 +567,8 @@ export async function resolveRoll(actor, id, success) {
   await save(actor, data, { type: "roll", project: id, text: game.i18n.format(success ? "CPRHQ.Workshop.log.success" : "CPRHQ.Workshop.log.fail",
     { name: project.name, total: pending.total }) });
 
-  const hint = success ? (halfway ? "CPRHQ.Workshop.successHint.halfway" : `CPRHQ.Workshop.successHint.${project.type}`)
+  const halfwayHint = (project.type === "invent") ? "CPRHQ.Workshop.successHint.halfway" : "CPRHQ.Workshop.successHint.halfwayOther";
+  const hint = success ? (halfway ? halfwayHint : `CPRHQ.Workshop.successHint.${project.type}`)
     : (halfway ? "CPRHQ.Workshop.failureHintInvent" : "CPRHQ.Workshop.failureHint");
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),

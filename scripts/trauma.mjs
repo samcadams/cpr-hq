@@ -1,4 +1,5 @@
 import { requestTrauma } from "./socket.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * Trauma Team coverage, through the Agent module (cpr-sam-agent, "CPR Functional Agent") when it's active.
@@ -108,6 +109,6 @@ export async function applyPlayerTrauma(actorUuid, { plan }, userId) {
  * @param {Function} refresh  redraws open Downtime/Lifestyle windows and HQ sheets
  */
 export function registerTraumaHooks(refresh) {
-  Hooks.once("cpr-sam-agent.ready", agent => agent.trauma?.handOffBilling?.(BILLED_BY));
+  Hooks.once("cpr-sam-agent.ready", agent => rule("billAgentPlans") && agent.trauma?.handOffBilling?.(BILLED_BY));
   Hooks.on("cpr-sam-agent.traumaChanged", () => refresh());
 }

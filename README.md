@@ -14,7 +14,7 @@ Journal Entry). The sheet tracks:
   written to character sheets as Active Effects (by the GM's client); NPC and faction HQs only show
   them.
 - **Housing and rent**: buy or rent from the Real Estate table. Rent is split equally between the
-  full crew.
+  full crew by default (see Settings).
 - **Facilities**: Lockup, Studio, Training Area, Garage, Medbay, Workstation, Workshop and the rest.
 
 ## Downtime and Lifestyle
@@ -38,6 +38,30 @@ Designs view lists finished inventions and fabrications, with Fabricate again to
 
 With the Functional Agent module (cpr-sam-agent) active, Trauma Team plans show on the
 Lifestyle cards and are charged on the Lifestyle bill.
+
+## Settings
+
+In Configure Settings → CPR HQ (GM only, the whole world), in setup order:
+
+- **Edit Downtime activities** and **Edit Lifestyle presets** open the same editors as the Downtime
+  window and Lifestyle & Housing.
+- **Table rules** groups the rules your table may want differently. Every default is how the module
+  has always worked.
+  - *Upkeep*: **Gear upkeep** (Breaking Your Stuff) on or off. Off: no upkeep status on gear, no
+    Gear Maintenance activity, no malfunctions. Natural-1 malfunctions and neglect only count while
+    it's on.
+  - *Billing*: **Bill Trauma Team and app subscriptions** on the Lifestyle bill (with the Agent
+    module; off hands their billing back to the Agent), and the **rent split** the Bill month dialog
+    starts with: equal, all to the first crew member, or none (you fill it in).
+  - *Crew benefits*: **automatic** (benefits kept on character sheets as Active Effects), **manual**
+    (a GM **Sync benefits** button on the HQ sheet) or **display only** (no effects; switching to it
+    offers to remove the existing ones).
+  - *Downtime*: the whole **Downtime system** (off: no planner, Past Days or settling; Lifestyle &
+    Housing stay), **every hour must be planned** before submitting, the **short-sleep** hours (0 =
+    no rule), the **default sleep** (e.g. `22:00-06:00`) and whether settling ticks **Fatigued**.
+  - *Workshop*: the **work day** (8 or 16 h), which projects get the **halfway Maker check**
+    (inventions, every project, or none), and the **Workshop roles** (comma list, default `tech`).
+- **Content folder** for the full Improvement texts (below).
 
 ## Macros
 

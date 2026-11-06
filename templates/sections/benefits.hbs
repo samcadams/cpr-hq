@@ -16,6 +16,7 @@
   {{else}}
   <p class="hint">{{localize "CPRHQ.Chip.noneCrew"}}</p>
   {{/if}}
+  {{#if syncButton}}<button type="button" class="btn-sm" data-action="syncBenefits" data-tooltip="CPRHQ.Chip.syncTip"><i class="fa-solid fa-rotate"></i> {{localize "CPRHQ.Chip.sync"}}</button>{{/if}}
 </div>
 
 {{#*inline "chip"}}

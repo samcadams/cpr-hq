@@ -6,6 +6,7 @@ import { lifestyleBillColumns, sendLifestyleBill } from "../billing.mjs";
 import { billReviewDialog } from "./dialogs.mjs";
 import { downtimeContext, activateDowntime, newDowntimeUI } from "../downtime/ui.mjs";
 import { holdRender } from "../downtime/timeline.mjs";
+import { rule } from "../rules.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2, DialogV2 } = foundry.applications.api;
 
@@ -53,6 +54,11 @@ export default class DowntimeApp extends HandlebarsApplicationMixin(ApplicationV
     return lifestyleActors(one ? { actors: [one] } : {});
   }
 
+  /** @override "Lifestyle" without the downtime system. */
+  get title() {
+    return game.i18n.localize(rule("downtimeSystem") ? this.options.window.title : "CPRHQ.Lifestyle.title");
+  }
+
   /** @override */
   render(options, _options) {
     // Wait while a timeline bar is being dragged (see holdRender).
@@ -67,6 +73,8 @@ export default class DowntimeApp extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   _onRender(context, options) {
+    // The frame keeps its first title: follow the downtime system switch.
+    if ( this.window?.title ) this.window.title.textContent = this.title;
     activateLifestyleCards(this.element);
     activateDowntime(this.element, this.dtUI, () => this.render());
   }
@@ -90,9 +98,10 @@ export default class DowntimeApp extends HandlebarsApplicationMixin(ApplicationV
   }
 }
 
-/** Context for the shared Downtime/Lifestyle panel (window and HQ tab). */
+/** Context for the shared Downtime/Lifestyle panel (window and HQ tab). No Downtime section without the downtime system. */
 export function lifestylePanelContext(actors, { scope = "all", ui } = {}) {
-  return { ...housingPanelContext(actors), scope, downtime: downtimePanelContext(actors, ui) };
+  const downtime = rule("downtimeSystem") ? downtimePanelContext(actors, ui) : null;
+  return { ...housingPanelContext(actors), scope, downtime };
 }
 
 /** Context for the Downtime section alone (the "cpr-hq.downtime-section" partial). */

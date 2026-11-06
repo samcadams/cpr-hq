@@ -1124,3 +1124,6 @@
 .cpr-hq-upkeep-card .uk-inspect .uk-what { flex: 1 0 100%; font-size: 0.9em; }
 /* The malfunction's 1d6, drawn with CPR's own roll-card classes (see diceBlock). */
 .cpr-hq-upkeep-card .uk-dice { margin: 0.3rem 0; }
+
+/* Table rules (Configure Settings): Foundry's own form look. */
+.cpr-hq-table-rules .cpr-hq-table-rules-body { display: flex; flex-direction: column; gap: 0.5rem; }

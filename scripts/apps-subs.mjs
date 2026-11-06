@@ -1,4 +1,5 @@
 import { BILLED_BY } from "./trauma.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * App subscriptions: monthly apps from the Agent module's App Store (cpr-sam-agent, its API's subscriptions.*).
@@ -56,6 +57,6 @@ export function appsCard(actor) {
  * @param {Function} refresh  redraws open Downtime/Lifestyle windows and HQ sheets
  */
 export function registerAppsHooks(refresh) {
-  Hooks.once("cpr-sam-agent.ready", agent => agent.subscriptions?.handOffBilling?.(BILLED_BY));
+  Hooks.once("cpr-sam-agent.ready", agent => rule("billAgentPlans") && agent.subscriptions?.handOffBilling?.(BILLED_BY));
   Hooks.on("cpr-sam-agent.subscriptionsChanged", () => refresh());
 }

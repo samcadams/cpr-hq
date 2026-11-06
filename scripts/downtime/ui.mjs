@@ -1,6 +1,6 @@
 import {
   currentRound, unsettled, settledAt, dayLabel, startRound, releaseRound, cancelRound, missionBlocks, setMission,
-  draftFor, saveDraft, unassignedHours, sleepPerDay, hoursByActivity, settleRound, pastDays, SLEEP_MINIMUM, HOURS,
+  draftFor, saveDraft, unassignedHours, sleepPerDay, hoursByActivity, settleRound, pastDays, sleepMinimum, HOURS,
   blockSpec, fillGaps, missingDetails, costsOf, parseCost, DAY, daysBehind, shiftDates
 } from "./model.mjs";
 import { timelineView, activateTimeline, blockDialog, blockInfoDialog, blockTip, captionOf } from "./timeline.mjs";
@@ -10,6 +10,7 @@ import { formatNumber } from "../utils.mjs";
 import { activitiesDialog } from "./editor.mjs";
 import { applyContext, appliedResults, activateApply } from "./apply.mjs";
 import { clearPractice } from "../training.mjs";
+import { rule } from "../rules.mjs";
 
 /**
  * The Downtime section (top of the Downtime/Lifestyle panel). Hosts (the window and the HQ tab) keep a small UI state
@@ -37,11 +38,12 @@ function summary(round, blocks) {
   const sleep = sleepPerDay(round, blocks);
   const day = b => dayLabel(round.start, Math.floor(b.start / HOURS));
   const missing = missingDetails(blocks);
+  const minimum = sleepMinimum();
   return {
     unassigned: unassignedHours(round, blocks),
     totals: hoursByActivity(blocks),
     shortSleep: (() => {
-      const days = sleep.map((h, d) => ({ h, label: dayLabel(round.start, d) })).filter(x => x.h < SLEEP_MINIMUM);
+      const days = sleep.map((h, d) => ({ h, label: dayLabel(round.start, d) })).filter(x => x.h < minimum);
       return days.length ? { n: days.length, tip: days.map(x => `${x.label}: ${x.h}h`).join("<br>") } : null;
     })(),
     missing: missing.length ? { n: missing.length, tip: missing.map(b => `${Handlebars.escapeExpression(blockSpec(b).fullName)} · ${day(b)}`).join("<br>") } : null,
@@ -150,9 +152,9 @@ export function downtimeContext(actors, ui) {
   ctx.summary = summary(round, [...mission.map(b => ({ ...b, activity: "mission" })), ...draft.blocks]);
   ctx.timeline = timelineView(round, { blocks: draft.blocks, locked: mission, editable, mode: "schedule", actor: target, free: freeHours(ctx.summary, draft.blocks) });
   ctx.timelineTarget = target.uuid;
-  // Every hour must be accounted for (and every detail given) before submitting: offer to fill the rest with Freetime.
+  // Every hour must be accounted for (table rule) and every detail given before submitting: offer to fill the rest with Freetime.
   ctx.canSubmit = editable;
-  ctx.needsFill = editable && (ctx.summary.unassigned > 0);
+  ctx.needsFill = editable && rule("requireFullDay") && (ctx.summary.unassigned > 0);
   ctx.blockedSubmit = editable && !ctx.needsFill && !!ctx.summary.missing;
   return ctx;
 }
@@ -227,7 +229,7 @@ export function activateDowntime(root, ui, rerender) {
         const target = fromUuidSync(button.dataset.uuid);
         const draft = draftFor(target, round);
         const all = [...missionBlocks(round, target.uuid), ...draft.blocks];
-        if ( unassignedHours(round, all) ) return ui.notifications.warn("CPRHQ.Downtime.fillFirst", { localize: true });
+        if ( rule("requireFullDay") && unassignedHours(round, all) ) return ui.notifications.warn("CPRHQ.Downtime.fillFirst", { localize: true });
         if ( missingDetails(draft.blocks).length ) return ui.notifications.warn("CPRHQ.Downtime.detailsFirst", { localize: true });
         return saveDraft(target, { status: "submitted" });
       }
@@ -313,7 +315,7 @@ async function settleDialog(actors) {
       ${pending.length ? `<p class="hint"><i class="fa-solid fa-triangle-exclamation"></i> ${game.i18n.format("CPRHQ.Downtime.settlePending",
         { names: pending.map(a => Handlebars.escapeExpression(a.name)).join(", ") })}</p>` : ""}
       <div class="form-group"><label>${loc("CPRHQ.Downtime.applyFatigue")}</label>
-        <div class="form-fields"><input type="checkbox" name="fatigue" checked></div></div>`,
+        <div class="form-fields"><input type="checkbox" name="fatigue" ${rule("fatigueOnSettle") ? "checked" : ""}></div></div>`,
     rejectClose: false, modal: true,
     ok: { label: loc("CPRHQ.Downtime.settle"), icon: "fa-solid fa-flag-checkered", callback: (e, b) => ({ fatigue: b.form.elements.fatigue.checked }) }
   });

@@ -2,6 +2,7 @@ import { MODULE_ID } from "./constants.mjs";
 import { isHQ, getHQ } from "./hq.mjs";
 import { memberBenefits, isFullCrew, customRolesMatch } from "./benefits.mjs";
 import { effectsByTier, registerCustomEffectHooks } from "./custom-effects.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * Managed Active Effects: keeps each crew member's HQ effects in step with the HQ.
@@ -138,12 +139,16 @@ function managedEffects(actor, entryUuid) {
 
 /**
  * Bring every actor's effects for one HQ in line with that HQ. Active GM only.
+ * Table rule crewEffects: auto syncs; manual only when `force` (the Sync benefits button); display never adds any.
  * @param {JournalEntry} entry
  * @param {object} [options]
- * @param {boolean} [options.remove]  Remove all of this HQ's effects (the HQ was deleted)
+ * @param {boolean} [options.remove]  Remove all of this HQ's effects (the HQ was deleted), in any mode
+ * @param {boolean} [options.force]   Sync in manual mode too
  */
-export async function syncHQ(entry, { remove = false } = {}) {
+export async function syncHQ(entry, { remove = false, force = false } = {}) {
   if ( !game.users.activeGM?.isSelf || !entry ) return;
+  const mode = rule("crewEffects");
+  if ( !remove && ((mode === "display") || ((mode === "manual") && !force)) ) return;
   const hq = (!remove && isHQ(entry)) ? getHQ(entry) : null;
   const apply = hq && !hq.isFaction;
 
@@ -207,9 +212,23 @@ const flush = foundry.utils.debounce(async () => {
 
 /** Debounced sync, so a burst of updates writes effects once. */
 export function queueSync(entry) {
-  if ( !game.users.activeGM?.isSelf ) return;
+  if ( !game.users.activeGM?.isSelf || (rule("crewEffects") !== "auto") ) return;
   queue.add(entry);
   flush();
+}
+
+/** Every actor's crew benefit effects (any HQ's, including deleted ones). Training Practice has no hq flag. */
+export function crewEffects() {
+  return game.actors.contents.flatMap(actor => actor.effects.filter(e => e.getFlag(MODULE_ID, "hq")));
+}
+
+/** Active GM: remove every crew benefit effect. */
+export async function removeCrewEffects() {
+  if ( !game.users.activeGM?.isSelf ) return;
+  for ( const actor of game.actors ) {
+    const ids = actor.effects.filter(e => e.getFlag(MODULE_ID, "hq")).map(e => e.id);
+    if ( ids.length ) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+  }
 }
 
 /** Register the hooks that keep effects in sync. */

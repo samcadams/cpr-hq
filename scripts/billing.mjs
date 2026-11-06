@@ -5,10 +5,11 @@ import { formatNumber } from "./utils.mjs";
 import { activeBenefits } from "./benefits.mjs";
 import { traumaAgent } from "./trauma.mjs";
 import { appsAgent } from "./apps-subs.mjs";
+import { rule, splitRent } from "./rules.mjs";
 
 /**
  * Monthly billing. Nothing is automatic: the GM reviews a proposed bill and sends it.
- *  - HQ bill (HQ sheet): the HQ's rent, split equally between the full crew.
+ *  - HQ bill (HQ sheet): the HQ's rent, split between the full crew (table rule: equally by default).
  *  - Lifestyle bill (Downtime/Lifestyle): each character's Lifestyle and Housing rent (see lifestyle.mjs).
  * Other modules (e.g. a phone app) can listen for the `cpr-hq.billed` hook to deliver bills in-world.
  * Either bill can go out as BangMe! invoices with the Agent module (api.money.invoice): nothing moves until each
@@ -37,10 +38,10 @@ export const BILL_COLUMNS = {
 
 /**
  * The Lifestyle bill's columns: Housing and Lifestyle, Trauma Team with the Agent module, and Apps (subscriptions)
- * while its App Store is on.
+ * while its App Store is on; those two only while the table bills them here (billAgentPlans).
  */
-export const lifestyleBillColumns = () => ["housing", "lifestyle", ...(traumaAgent() ? ["trauma"] : []),
-  ...(appsAgent() ? ["apps"] : [])];
+export const lifestyleBillColumns = () => ["housing", "lifestyle",
+  ...(rule("billAgentPlans") && traumaAgent() ? ["trauma"] : []), ...(rule("billAgentPlans") && appsAgent() ? ["apps"] : [])];
 
 /** The month a new bill is for: Simple Calendar's current month, else blank for the GM to fill in. */
 export function billingMonth() {
@@ -48,22 +49,18 @@ export function billingMonth() {
 }
 
 /**
- * Proposed HQ bill: the effective rent split equally between every full crew member (Team Members aren't billed);
- * any remainder goes to the first members.
+ * Proposed HQ bill: the effective rent split between every full crew member (Team Members aren't billed), as the
+ * rentSplit table rule says (equal: any remainder goes to the first members; first; none).
  * @returns {{uuid, name, wealth, charges: {rent}}[]}
  */
 export function proposeBill(hq) {
   const members = hq.crew.filter(m => !m.teamMember)
     .map(m => ({ member: m, actor: fromUuidSync(m.uuid) }))
     .filter(x => x.actor);
-  const rent = hq.effectiveRent;
-  const share = members.length ? Math.floor(rent / members.length) : 0;
-  let remainder = members.length ? rent - (share * members.length) : 0;
-  return members.map(({ actor }) => {
-    const charge = share + (remainder > 0 ? 1 : 0);
-    remainder--;
-    return { uuid: actor.uuid, name: actor.name, wealth: actor.system.wealth?.value ?? null, charges: { rent: charge } };
-  });
+  const charges = splitRent(hq.effectiveRent, members.length, rule("rentSplit"));
+  return members.map(({ actor }, i) => ({
+    uuid: actor.uuid, name: actor.name, wealth: actor.system.wealth?.value ?? null, charges: { rent: charges[i] }
+  }));
 }
 
 const sumTotals = results => results.reduce((sum, r) => sum + r.total, 0);

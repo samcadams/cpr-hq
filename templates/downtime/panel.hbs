@@ -1,5 +1,5 @@
 {{!-- Downtime/Lifestyle panel: shared by the standalone window and the HQ sheet's Downtime/Lifestyle tab. --}}
 <div class="lifestyle-panel">
-  {{> "cpr-hq.downtime-section" downtime}}
+  {{#if downtime}}{{> "cpr-hq.downtime-section" downtime}}{{/if}}
   {{> "cpr-hq.lifestyle-section"}}
 </div>

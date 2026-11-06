@@ -86,6 +86,134 @@
       "contentFolder": {
         "name": "Content folder",
         "hint": "A folder under Data that may hold cpr-hq.json: the books' full Improvement and Lifestyle texts, which the module doesn't ship. Without it the sheet shows short summaries. Reload after adding the file."
+      },
+      "contentFound": {
+        "name": "Content file found",
+        "hint": "Internal. Whether the content folder holds cpr-hq.json."
+      },
+      "downtimeSettled": {
+        "name": "Downtime settled to",
+        "hint": "Internal. The date downtime has been settled up to."
+      },
+      "downtimeRound": {
+        "name": "Open downtime round",
+        "hint": "Internal. The downtime round being planned."
+      },
+      "downtimeActivities": {
+        "name": "Downtime activities",
+        "hint": "The activities characters can plan in downtime. Edit them with Edit Downtime activities."
+      },
+      "downtimeActivitiesAdded": {
+        "name": "New default activities added",
+        "hint": "Internal. Default activities already merged into the list."
+      },
+      "lifestylePresets": {
+        "name": "Lifestyle presets",
+        "hint": "The GM's own Lifestyle presets, next to the rulebook's. Edit them with Edit Lifestyle presets."
+      },
+      "upkeep": {
+        "name": "Gear upkeep (Breaking Your Stuff)",
+        "hint": "Track monthly gear maintenance, Damaged gear and malfunctions."
+      },
+      "billAgentPlans": {
+        "name": "Bill Trauma Team and app subscriptions on the Lifestyle bill",
+        "hint": "Off: the Agent module bills them on its own."
+      },
+      "rentSplit": {
+        "name": "Bill month: starting rent split",
+        "hint": "How the HQ rent is first split between full crew members. You can still change it before sending.",
+        "equal": "Equal shares",
+        "first": "All to the first member",
+        "none": "Nothing (fill in by hand)"
+      },
+      "crewEffects": {
+        "name": "Crew benefit effects",
+        "hint": "How HQ benefits reach the crew's character sheets as Active Effects.",
+        "auto": "Automatic",
+        "manual": "Manual (Sync benefits button)",
+        "display": "Display only (no effects)"
+      },
+      "downtimeSystem": {
+        "name": "Downtime system",
+        "hint": "The downtime planner, Past Days, settling rounds and the HQ downtime alert. Off: Lifestyle & Housing only."
+      },
+      "requireFullDay": {
+        "name": "Plans must fill every hour",
+        "hint": "A downtime plan can only be submitted once every hour of the day is assigned."
+      },
+      "sleepMinimum": {
+        "name": "Minimum sleep (hours)",
+        "hint": "Less sleep than this warns, and settling can make the character Fatigued. 0: no short-sleep rule."
+      },
+      "defaultSleep": {
+        "name": "Default sleep",
+        "hint": "The sleep block new plans start with, as HH:MM-HH:MM (e.g. 22:00-06:00)."
+      },
+      "fatigueOnSettle": {
+        "name": "Fatigued on settle",
+        "hint": "The settle dialog starts with Fatigued ticked for characters who slept too little."
+      },
+      "halfwayCheck": {
+        "name": "Halfway check",
+        "hint": "Which Workshop projects stop halfway for a check.",
+        "invent": "Inventions only",
+        "all": "Every project",
+        "none": "None"
+      },
+      "workshopRoles": {
+        "name": "Workshop roles",
+        "hint": "Roles that get the Workshop, as a comma list (e.g. Tech, Medtech). Empty: Tech."
+      },
+      "menu": {
+        "editActivities": {
+          "name": "Downtime activities",
+          "label": "Edit Downtime activities",
+          "hint": "Add, change or remove the activities characters can plan in downtime."
+        },
+        "editPresets": {
+          "name": "Lifestyle presets",
+          "label": "Edit Lifestyle presets",
+          "hint": "Add your own Lifestyle presets next to the rulebook's."
+        },
+        "tableRules": {
+          "name": "Table rules",
+          "label": "Table rules",
+          "hint": "Turn the module's rules on or off and set how they work at your table."
+        }
+      },
+      "group": {
+        "activities": {
+          "label": "Downtime activities",
+          "hint": "What characters can do in downtime."
+        },
+        "lifestyle": {
+          "label": "Lifestyle presets",
+          "hint": "The Lifestyles characters can pick."
+        },
+        "upkeep": {
+          "label": "Upkeep",
+          "hint": "Gear maintenance and malfunctions (Breaking Your Stuff)."
+        },
+        "billing": {
+          "label": "Billing",
+          "hint": "What the monthly bills charge."
+        },
+        "crewBenefits": {
+          "label": "Crew benefits",
+          "hint": "HQ benefits on the crew's sheets."
+        },
+        "downtime": {
+          "label": "Downtime",
+          "hint": "Planning and settling downtime rounds."
+        },
+        "workshop": {
+          "label": "Workshop",
+          "hint": "Tech projects and who can run them."
+        },
+        "content": {
+          "label": "Content",
+          "hint": "The books' full texts."
+        }
       }
     },
     "Log": {
@@ -442,7 +570,14 @@
       "legendRoll": "Roll-dialog option",
       "everyone": "Everyone",
       "noneCrew": "No HQ benefits apply yet.",
-      "legendInfo": "Rule to remember"
+      "legendInfo": "Rule to remember",
+      "sync": "Sync benefits",
+      "syncTip": "Write this HQ's benefits to the crew's character sheets as effects.",
+      "synced": "Crew benefits synced to the character sheets.",
+      "syncActiveGM": "Only the active GM can sync crew benefits.",
+      "removeTitle": "Crew benefit effects",
+      "removeConfirm": "Remove the {n} crew benefit effects now?",
+      "removed": "Crew benefit effects removed."
     },
     "Activity": {
       "add": "Add entry",
@@ -907,7 +1042,8 @@
         "invent": "Invented: Fabricate Prototype before anyone else can claim it.",
         "upgrade": "The GM applies the upgrade to the item.",
         "repair": "Repaired.",
-        "halfway": "The design works: finish the remaining hours to complete the invention."
+        "halfway": "The design works: finish the remaining hours to complete the invention.",
+        "halfwayOther": "Halfway check passed: finish the remaining hours to complete it."
       },
       "failureHint": "Start over: the hours are lost, the materials and item are fine.",
       "lastSuccess": "Last roll {total}: success",
@@ -1041,8 +1177,9 @@
         "expired": "{n}h unspent from the last downtime lost"
       },
       "failureHintInvent": "Back to the drawing board: the hours so far are lost.",
-      "halfwayNotice": "{name} is halfway: roll the Maker check to see if the design works.",
+      "halfwayNotice": "{name} is halfway: roll the Maker check to see if it works.",
       "inventedNotice": "{name} is invented: Fabricate Prototype before anyone else can claim it.",
+      "completeNotice": "{name} is complete: Finish it to clear the slot.",
       "rollHalfway": "Roll halfway check",
       "halfwayTip": "Check at {n}h",
       "halfwayAt": "Halfway check at {n}h",

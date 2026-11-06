@@ -11,6 +11,7 @@ import { lifestylePanelContext } from "./downtime.mjs";
 import { activateDowntime, newDowntimeUI } from "../downtime/ui.mjs";
 import { canAddPage } from "../socket.mjs";
 import { workshopContext, activateWorkshop, newWorkshopUI, crewTechs } from "../workshop/ui.mjs";
+import { rule } from "../rules.mjs";
 
 const IMP_FILTERS = ["all", "installed", "available", "custom"];
 
@@ -155,6 +156,8 @@ export function registerCoreSections() {
         chips: chips(memberBenefits(hq, c.member, c.actor).filter(b => !isCrewWide(b)))
       })).filter(m => m.chips.length);
       context.anyChips = context.sharedChips.length || context.members.length;
+      // Table rule crewEffects "manual": the GM writes the effects to the sheets with a button.
+      context.syncButton = rule("crewEffects") === "manual";
     }
   });
 

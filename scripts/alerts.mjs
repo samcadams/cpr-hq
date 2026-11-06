@@ -3,6 +3,7 @@ import { updateHQ } from "./hq.mjs";
 import { calendarActive } from "./calendar.mjs";
 import { billingMonth } from "./billing.mjs";
 import { currentRound, unsettled } from "./downtime/model.mjs";
+import { rule } from "./rules.mjs";
 
 /**
  * Alert registry. Features register alerts; the sheet shows every alert whose check returns something.
@@ -92,6 +93,7 @@ export function registerCoreAlerts({ billDialog }) {
     gmOnly: true,
     order: 20,
     check: () => {
+      if ( !rule("downtimeSystem") ) return null;
       const round = currentRound();
       if ( round ) return {
         level: "info", icon: "fa-solid fa-hourglass-half",
