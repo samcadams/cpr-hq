@@ -89,18 +89,19 @@ class TableRulesApp extends HandlebarsApplicationMixin(ApplicationV2) {
     tag: "form",
     classes: ["cpr-hq-table-rules"],
     window: { title: "CPRHQ.Settings.menu.tableRules.name", icon: "fa-solid fa-scale-balanced", contentClasses: ["standard-form"] },
-    position: { width: 600 },
+    position: { width: 640, height: 720 },
     form: { handler: TableRulesApp.#onSubmit, closeOnSubmit: true }
   };
 
   static PARTS = {
-    form: { template: `${TEMPLATE_ROOT}/settings/table-rules.hbs`, scrollable: [""] }
+    form: { template: `${TEMPLATE_ROOT}/settings/table-rules.hbs`, scrollable: [""] },
+    footer: { template: "templates/generic/form-footer.hbs" }
   };
 
   async _prepareContext() {
     const groups = settingsGroups().filter(g => g.menu === "tableRules")
       .map(g => ({ ...g, fields: g.keys.map(ruleField) }));
-    return { groups };
+    return { groups, buttons: [{ type: "submit", icon: "fa-solid fa-floppy-disk", label: "CPRHQ.Save" }] };
   }
 
   /** Save the values that changed. */

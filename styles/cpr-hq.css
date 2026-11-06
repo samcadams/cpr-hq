@@ -1126,4 +1126,10 @@
 .cpr-hq-upkeep-card .uk-dice { margin: 0.3rem 0; }
 
 /* Table rules (Configure Settings): Foundry's own form look. */
-.cpr-hq-table-rules .cpr-hq-table-rules-body { display: flex; flex-direction: column; gap: 0.5rem; }
+.cpr-hq-table-rules .cpr-hq-table-rules-body { display: block; flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 4px; }
+.cpr-hq-table-rules .tr-group { display: block; margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border-light-tertiary, #888); border-radius: 6px; }
+.cpr-hq-table-rules .tr-title { margin: 0 0 0.25rem; padding: 0; border: none; color: inherit; text-shadow: none; font-size: var(--font-size-16, 1rem); font-weight: bold; }
+.cpr-hq-table-rules .tr-group .form-group { margin: 0.6rem 0 0; }
+.cpr-hq-table-rules .tr-group .form-group > p.hint { margin: 0.2rem 0 0; }
+.cpr-hq-table-rules .tr-group > p.hint { margin: 0 0 0.25rem; }
+.cpr-hq-table-rules .form-group > label { line-height: 1.3; }

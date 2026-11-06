@@ -1,8 +1,7 @@
-<div class="cpr-hq-table-rules-wrap">
 <div class="cpr-hq-table-rules-body">
   {{#each groups}}
-  <fieldset>
-    <legend>{{label}}</legend>
+  <section class="tr-group">
+    <h3 class="tr-title">{{label}}</h3>
     <p class="hint">{{hint}}</p>
     {{#each fields}}
     <div class="form-group">
@@ -23,10 +22,6 @@
       <p class="hint">{{hint}}</p>
     </div>
     {{/each}}
-  </fieldset>
+  </section>
   {{/each}}
-</div>
-<footer class="form-footer">
-  <button type="submit"><i class="fa-solid fa-floppy-disk"></i> <span>{{localize "CPRHQ.Save"}}</span></button>
-</footer>
 </div>
