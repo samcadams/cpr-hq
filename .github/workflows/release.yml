@@ -1,0 +1,33 @@
+# Publishing a GitHub release tagged v<version> builds the module with tools/release.mjs (from the tagged commit)
+# and attaches <id>.zip and module.json, the files the manifest and download URLs in module.json point at.
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tag matches module.json
+        run: |
+          want="v$(jq -r .version module.json)"
+          [ "$TAG" = "$want" ] || { echo "::error::release tag $TAG, but module.json is $want"; exit 1; }
+
+      - name: Build
+        run: node tools/release.mjs --out "$RUNNER_TEMP/release"
+
+      - name: Attach to the release
+        run: gh release upload "$TAG" "$RUNNER_TEMP"/release/*.zip "$RUNNER_TEMP"/release/module.json --clobber
